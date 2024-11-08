@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">{{ room.title }}</h1>
+
+    <!-- RoomDetails -->
+    <div id="RoomDetails" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            {% for image in room.images %}
+            <div class="item {% if loop.first %}active{% endif %}">
+                <img src="{{ url_for('static', filename='images/photos/' ~ image) }}" class="img-responsive" alt="slide">
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#RoomDetails" role="button" data-slide="prev">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <a class="right carousel-control" href="#RoomDetails" role="button" data-slide="next">
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </div>
+    <!-- RoomCarousel -->
+
+    <div class="room-features spacer">
+        <div class="row">
+            <div class="col-sm-12 col-md-5"> 
+                <p>{{ room.description }}</p>
+            </div>
+            <div class="col-sm-6 col-md-3 amenities"> 
+                <h3>Amenities</h3>    
+                <ul>
+                    {% for amenity in room.amenities %}
+                    <li>{{ amenity }}</li>
+                    {% endfor %}
+                </ul>
+            </div>  
+            <div class="col-sm-3 col-md-2">
+                <div class="size-price">Size<span>{{ room.size }}</span></div>
+            </div>
+            <div class="col-sm-3 col-md-2">
+                <div class="size-price">Price<span>{{ room.price }}</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

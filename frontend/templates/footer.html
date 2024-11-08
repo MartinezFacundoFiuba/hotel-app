@@ -1,0 +1,44 @@
+<footer class="spacer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5">
+                <h4>Holiday Crown</h4>
+                <p>Holiday Crown was these three and songs arose whose...</p>
+            </div>              
+            <div class="col-sm-3">
+                <h4>Quick Links</h4>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('rooms_tariff') }}">Rooms & Tariff</a></li>        
+                    <li><a href="{{ url_for('introduction') }}">Introduction</a></li>
+                    <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4 subscribe">
+                <h4>Subscription</h4>
+                <form action="{{ url_for('subscribe') }}" method="post">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Enter email id here">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Get Notify</button>
+                        </span>
+                    </div>
+                </form>
+                <div class="social">
+                    <a href="#"><i class="fa fa-facebook-square"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                    <a href="#"><i class="fa fa-twitter-square"></i></a>
+                    <a href="#"><i class="fa fa-pinterest-square"></i></a>
+                    <a href="#"><i class="fa fa-tumblr-square"></i></a>
+                    <a href="#"><i class="fa fa-youtube-square"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="text-center copyright">Powered by <a href="http://thebootstrapthemes.com">thebootstrapthemes.com</a></div>
+<a href="#home" class="toTop scroll"><i class="fa fa-angle-up"></i></a>
+
+
+
+
