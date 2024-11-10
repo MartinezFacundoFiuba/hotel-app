@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {%block main%}
-<form id = "formulario_propietario" action=""method="post">
+<div id="formulario_propietario">
+<form id  action=""method="post">
     <ul>
         <li>
             <label for="nombre">Ingrese su nombre:</label>
@@ -24,7 +25,7 @@
             <input type="text" id="email" placeholder="Hoteles River">
         </li>
     </ul>
-    <button type="submit">Enviar</button>
+    <button type="submit" id="boton-formulario">Enviar</button>
 </form>
-
+</div>
 {% endblock %}

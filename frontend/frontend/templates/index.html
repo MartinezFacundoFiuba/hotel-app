@@ -1,5 +1,33 @@
 {% extends 'base.html' %}
 {%block main%}
+<div id="content"></div>
+    <div class="container">
+        <h1>Bienvenido a nuestro sitio web de hoteles</h1>
+        <p>Explora nuestros hoteles y habitaciones.</p>
+        <a href="{{ url_for('hoteles') }}" class="btn btn-primary">Ver Hoteles</a> 
+    </div>
+</div>
+<div class="form-container">
+    <form action="">
+        <ul>
+            <li>
+                <label for="Provincia">Provincia</label>
+                <input type="text" name="provincia" id="provincia" placeholder="Buenos Aires">
+            </li>
+            <li>
+                <label for="ciudad">Ciudad</label>
+                <input type="text" name="ciudad" id="ciudad">
+            </li>
+            <li>
+                <label for="fecha">Fecha</label>
+                <input type="date" name="fecha" id="fecha">
+            </li>
+        </ul>
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
+</div>
 <div id="hoteles-principales">
 <h2>Hoteles Principales</h2>
     <div class="contenedor1">
@@ -45,5 +73,20 @@
         </section>
     </div>
   </div>
+</div>
+<div id="Habitaciones-principales">
+    <h2>habitaciones-Principales</h2>
+    <button>Ver mas</button>
+</div>
+<div id="Habitaciones-en-descuento"></div>
+    <h2>Ofertas</h2>
+    <button>Ver mas</button>
+</div>
+<div id="reseñas">
+    <h2>Reseñas</h2>
+    <button>Ver mas</button>
+</div>
+<div id="preguntas-frecuentes"></div>
+    <h2>Preguntas Frecuentes</h2>
 </div>
 {% endblock %}

@@ -545,15 +545,89 @@ td, th {
 tr:nth-child(even) {
   background-color: black;
 }
-
 .button {
-  border: 10px;
-  color: black;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none; /* Eliminar subrayado del enlace */
+    background-color: #007bff; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar el cursor cuando pasa sobre el botón */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Color de fondo cuando el ratón pasa por encima */
+}
+/*formulario */
+#formulario{
+    display:flex;
+    align-items: flex-start;
+    width: auto;
+    margin-bottom: 20px;
+}
+#formulario_propietario button{
+    align-items: center;
+    width: 100%;
+}
+
+#formulario_propietario label{
+    font-size: 20px;
+    font-style: initial;
+}
+
+#formulario_propietario input, select, textarea{
+    height: 20px;
+    width: 100%;
+    height: 30px;
+    font-size: 20px;
+    color:#6c5e5e;
+    font-weight:normal;
+}
+#formulario_propietario textarea{
+  padding: 5px;
+  font-family: "Epilogue", sans-serif;  
+}
+
+#formulario li{
+    margin-bottom: 20px;
+}
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#boton-formulario{
+    font-size: 25px;
+    margin-left: 2%;
+    border-radius: 15px;
+    width: 75%;
+    margin: 10px;
+}
+#boton-formulario:hover{
+    background-color: #41814f7e;
+    border-radius: 15px;
+    color: black;
+    transform: scale(1.05);
+}
+#formulario_propietario {
+    margin: 0 10px;
+    padding-top: 20px;
+    background-color: #aaaaaa;
+    border-radius: 15px;
+}
+.form-container {
+    width: 3000px;
+    height: 300px;      
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
