@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{%block main%}
+<body class="cuerpo-del-formulario">
+    <div id="formulario-propietario">
+    <form id action="/registrados" method="post">
+        <h2 class="titulo">Formulario de Cliente </h2>
+        <div class="form_input">
+            <label for="nombre-de-usuario">Nombre de Usuario</label>
+            <input type="text" placeholder="Usuario1233" id="nombre-usuario" name="usuario" required>
+        </div>
+        <div class="form_input">
+            <label for="email">Email:</label>
+            <input type="email" placeholder="ejemplo@gmail.com" id="email" name="correo" required maxlength="100">
+        </div>
+        <div class="form_input">
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" placeholder="12345678" name="telefono" maxlength="16">
+        </div>
+        <div class="form_input">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" placeholder="password" name="contraseña" required>
+        </div>
+        <div class="form_input">
+            <label for="confirm_password">Confirmar contraseña:</label>
+            <input type="password" id="confirm_password" placeholder="password-again"  name="confirm_contraseña" required>
+        </div>
+        <div class="form_input">
+            <button type="submit" id="boton-formulario">Enviar</button>
+        </div>
+    </form>
+    </div>
+    </body>
+{% endblock %}

@@ -24,5 +24,8 @@ def registro_inquilino():
 @app.route('/registro')
 def registro():
     return render_template('registro.html')
+@app.route('/registrados')
+def registrados():
+    return render_template('registrados.html')
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
