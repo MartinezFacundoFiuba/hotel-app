@@ -18,6 +18,9 @@ def contacto():
 @app.route('/registrar_propietario')
 def registro_propietario():
     return render_template('registrar_propietario.html')
+@app.route('/registrar_inquilino')
+def registro_inquilino():
+    return render_template('registrar_inquilino.html')
 @app.route('/registro')
 def registro():
     return render_template('registro.html')

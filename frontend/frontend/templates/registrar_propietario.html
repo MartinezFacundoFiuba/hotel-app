@@ -1,30 +1,26 @@
 {% extends 'base.html' %}
 
 {%block main%}
-<form id = "formulario_propietario" action=""method="post">
-    <ul>
-        <li>
-            <label for="nombre">Ingrese su nombre:</label>
-            <br>
-            <input type="text" id="nombre" placeholder="manuel">
-        </li>
-        <li>
-            <label for="apellido">Ingrese su apellido:</label>
-            <br>
-            <input type="text" id="apellido" placeholder="monteros">
-        </li>
-        <li>
-            <label for="email">Ingrese su mail:</label>
-            <br>
-            <input type="text" id="email" placeholder="juancito@gmail.com">
-        </li>
-        <li>
-            <label for="nombre_de_empresa"></label>
-            <br>
-            <input type="text" id="email" placeholder="Hoteles River">
-        </li>
-    </ul>
-    <button type="submit">Enviar</button>
+<body class="cuerpo-del-formulario">
+<div id="formulario-propietario">
+<form id action="method"="post">
+    <h2 class="titulo">Formulario de propietario </h2>
+    <div class="form_input">
+        <label for="nombre-de-propietario">Nombre de Propietario</label>
+        <input type="text" placeholder="Nombre y Apellido" id="nombre-propietario">
+    </div>
+    <div class="form_input">
+        <label for="nombre-de-hotel">Hotel</label>
+        <input type="text" placeholder="Nombre Hotel" id="nombre-hotel">
+    </div>
+    <div class="form_input">
+        <label for="email">Email</label>
+        <input type="email" placeholder="ejemplo@gmail.com" id="email">
+    </div>
+    <div class="form_input">
+        <button type="submit" id="boton-formulario">Enviar</button>
+    </div>
 </form>
-
+</div>
+</body>
 {% endblock %}
