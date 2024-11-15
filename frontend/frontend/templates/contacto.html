@@ -11,22 +11,28 @@
                 </div>
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="spacer">   		        	
-                        <h4>Write to us</h4>
-                        <form role="form">
-                            <div class="form-group">	
-                                <input type="text" class="form-control" id="name" placeholder="Name">
+                        
+                        <form id action="/mensajes" method="post">
+                            <h2 class="titulo">Escribenos </h2>
+                            <div class="form_input">
+                                <label for="nombre-de-usuario">Nombre de Usuario</label>
+                                <input type="text" placeholder="Usuario1233" id="nombre-usuario" name="usuario" required>
                             </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" id="email" placeholder="Enter email">
+                            <div class="form_input">
+                                <label for="email">Email:</label>
+                                <input type="email" placeholder="ejemplo@gmail.com" id="email" name="correo" required maxlength="100">
                             </div>
-                            <div class="form-group">
-                                <input type="phone" class="form-control" id="phone" placeholder="Phone">
+                            <div class="form_input">
+                                <label for="telefono">Teléfono:</label>
+                                <input type="tel" id="telefono" placeholder="12345678" name="telefono" maxlength="16">
                             </div>
-                            <div class="form-group">
-                                <textarea class="form-control" placeholder="Message" rows="4"></textarea>
+                            <div class="form_input">
+                                <label for="Mensaje">Mensaje:</label>                          
+                                <textarea class="form_textarea" placeholder="Mensaje" cols="10" rows="4"></textarea>
                             </div>
-                            <button type="submit" class="btn btn-default">Send</button>
-                        </form>
+                            <div class="form_input">
+                                <button type="submit" id="boton-formulario">Enviar</button>
+                            </div>
                     </div>
                 </div>
             </div>
