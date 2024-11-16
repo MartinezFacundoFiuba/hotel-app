@@ -8,6 +8,17 @@ body{background-color: #fff;font-family: 'Raleway', sans-serif;font-size: 15px;l
     background-color:#AEAEAC;
 }
 
+.cuerpo-de-inicio-sesión {
+    margin: 0;
+    background-color:#AEAEAC;
+}
+
+#login-cliente {
+
+    padding-bottom: 25px;
+}
+
+
 input {
 
     width: 100%;
@@ -40,6 +51,43 @@ form {
 
     width: 500px; /* ancho */
     height: 150px;
+}
+
+.titulo-sesión {
+    text-align: center;
+}
+
+.titulo-opción {
+    text-align: center;
+}
+
+.opción1 {
+    background-color: #f2f2f2; 
+    border: 5px solid #333; 
+    border-radius: 10px;
+    width: 350px; /* ancho del contenedor */
+    height: 80px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    color:#252423;
+    
+}
+
+.opción2 {
+    background-color: #f2f2f2; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 5px solid #333;
+    border-radius: 10px;
+    height: 80px; 
+    width: 350px; /* ancho del contenedor */
+    margin: 0 auto;
+    margin-bottom: 10px;
+    color:#252423
+}
+
+.link {
+    color:#252423;
 }
 
 .btn,a,a:hover{text-decoration: none;-webkit-transition: all 0.3s ease-in-out;-moz-transition: all 0.3s ease-in-out;-ms-transition: all 0.3s ease-in-out;-o-transition: all 0.3s ease-in-out;transition: all 0.3s ease-in-out;outline:0 ;}

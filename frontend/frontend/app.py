@@ -27,5 +27,14 @@ def registro():
 @app.route('/registrados')
 def registrados():
     return render_template('registrados.html')
+@app.route('/inicio_sesión')
+def inicio_sesión():
+    return render_template('inicio-de-sesión.html')
+@app.route('/inicio_sesión_propietario')
+def inicio_sesión_propietario():
+    return render_template('inicio-sesión-propietario.html')
+@app.route('/inicio_sesión_cliente')
+def inicio_sesión_cliente():
+    return render_template('inicio-sesión-cliente.html')
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
