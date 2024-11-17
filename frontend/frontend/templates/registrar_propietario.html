@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{%block main%}
+<body class="cuerpo-del-formulario">
+<div id="formulario-propietario">
+<form id action="method"="post">
+    <h2 class="titulo">Formulario de propietario </h2>
+    <div class="form_input">
+        <label for="nombre-de-propietario">Nombre de Propietario</label>
+        <input type="text" placeholder="Nombre y Apellido" id="nombre-propietario" name="usuario-propietario" >
+    </div>
+    <div class="form_input">
+        <label for="nombre-de-hotel">Hotel</label>
+        <input type="text" placeholder="Nombre Hotel" id="nombre-hotel" name="empresa">
+    </div>
+    <div class="form_input">
+        <label for="email">Email</label>
+        <input type="email" placeholder="ejemplo@gmail.com" id="email" name="correo">
+    </div>
+    <div class="form_input">
+        <button type="submit" id="boton-formulario">Enviar</button>
+    </div>
+</form>
+</div>
+</body>
+{% endblock %}

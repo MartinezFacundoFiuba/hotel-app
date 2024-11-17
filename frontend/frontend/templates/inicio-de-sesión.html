@@ -1,0 +1,16 @@
+{% extends 'base2.html' %}
+{%block main%}
+<h1 class="titulo-sesión">Inicio de sesión</h1>
+
+<div class="opción1">
+    <h2 class="titulo-opción"><a class="link"  href="{{ url_for('inicio_sesión_propietario') }}">Como propietario</a></h2>
+</div>
+
+<div class="opción2">
+    <h2 class="titulo-opción"><a class="link" href="{{ url_for('inicio_sesión_cliente') }}">Como cliente</a> </h2>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block main %}
+<p>Bienvenido al apartado de registro</p>
+<td><a href="{{ url_for('registro_propietario')}}" class="button">Haga click aqui para registrarse como propietario</a></td>
+<td><a href="{{ url_for('registro_inquilino')}}" class="button">Haga click aqui para registrarse como usuario</a></td>
+{% endblock %}
