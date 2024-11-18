@@ -37,12 +37,34 @@
                 </ul>
             </div>  
             <div class="col-sm-3 col-md-2">
-                <div class="size-price">Size<span>{{ room.size }}</span></div>
+                <div class="size-price">Tamaño de la Suite<span>{{ room.size }}</span></div>
             </div>
             <div class="col-sm-3 col-md-2">
-                <div class="size-price">Price<span>{{ room.price }}</span></div>
+                <div class="size-price">Precio por Noche<span>{{ room.price }}</span></div>
             </div>
         </div>
     </div>
+
+    <!-- Form de reserva -->
+    <div class="reservation-form spacer">
+        <h3>Hacé tu reserva</h3>
+        <form action="{{ url_for('reserve', room_id=room.id) }}" method="POST">
+            <div class="form-group">
+                <label for="checkin">Día de Check-In:</label>
+                <input type="date" class="form-control" id="checkin" name="checkin" required>
+            </div>
+            <div class="form-group">
+                <label for="checkout">Día de Check-Out:</label>
+                <input type="date" class="form-control" id="checkout" name="checkout" required>
+            </div>
+            <div class="form-group">
+                <label for="guests">Número de Huéspedes:</label>
+                <input type="number" class="form-control" id="guests" name="guests" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Reservá</button>
+        </form>
+    </div>
+    <!-- Form de reserva -->
+
 </div>
 {% endblock %}
