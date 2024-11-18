@@ -18,6 +18,14 @@ def subscribe():
 def rooms_tariff():
     return render_template('rooms-tariff.html')
 
+@app.route('/reserva/<int:room_id>', methods=['POST'])
+def reserve(room_id):
+    checkin = request.form['checkin']
+    checkout = request.form['checkout']
+    guests = request.form['guests']
+    # Aquí procesarías los datos de la reserva
+    return f"Reserva hecha para la Habitación: {room_id} desde {checkin} al {checkout} para {guests} invitado(s)."
+
 @app.route('/hotels')
 def hotels():
     # Simulación de datos de hoteles (esto podría venir de una base de datos)
@@ -33,11 +41,12 @@ def room_details(room_id):
     # Simulación de datos de habitaciones (esto podría venir de una base de datos)
     rooms = {
         1: {
+            "id": room_id,
             'title': 'Luxurious Suites',
             'images': ['8.jpg', '9.jpg', '10.jpg'],
             'description': 'Descripción de la suite lujosa...',
-            'size': '44 sq',
-            'price': '$200.00',
+            'size': '40x50m',
+            'price': '$150usd',
             'amenities': [
                 'Una de las mayores barreras para hacer la venta es su perspectiva.',
                 'Principio para trabajar y ganar más dinero mientras se divierte más.',
@@ -45,7 +54,7 @@ def room_details(room_id):
                 'Espacio en su casa Cómo vender más rápido que sus vecinos.'
             ]
         },
-        # Agrega más habitaciones según sea necesario
+        # Agregar más habitaciones si es necesario
     }
 
     room = rooms.get(room_id)
