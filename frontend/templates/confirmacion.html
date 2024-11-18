@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+<div class="container">
+    <h1 class="title">Reserva Confirmada</h1>
+    <p>Gracias por tu Reserva!</p>
+    <ul>
+        <li>Room ID: {{ reservation.room_id }}</li>
+        <li>Dia de Check-In: {{ reservation.checkin }}</li>
+        <li>Dia de Check-Out: {{ reservation.checkout }}</li>
+        <li>Numero de Hospedados: {{ reservation.guests }}</li>
+    </ul>
+    <a href="{{ url_for('home') }}" class="btn btn-primary">Return to Home</a>
+</div>
+{% endblock %}
