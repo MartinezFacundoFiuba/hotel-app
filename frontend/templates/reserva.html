@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title">Sus Reservas</h1>
+    {% if reservations %}
+        <ul>
+            {% for reservation in reservations %}
+            <li>
+                Room ID: {{ reservation.room_id }},
+                Check-In: {{ reservation.checkin }},
+                Check-Out: {{ reservation.checkout }},
+                Guests: {{ reservation.guests }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No se encontraron reservas</p>
+    {% endif %}
+</div>
+{% endblock %}
