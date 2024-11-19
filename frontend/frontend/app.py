@@ -11,7 +11,7 @@ def habitaciones():
     return render_template('habitaciones.html')
 @app.route('/ubicaciones')
 def ubicaciones():
-    return render_template('ubicaciones.html')
+    return render_template('ubicaciones-hoteles.html')
 @app.route('/contacto')
 def contacto():
     return render_template('contacto.html')
