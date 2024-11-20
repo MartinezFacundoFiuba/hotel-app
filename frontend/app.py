@@ -18,6 +18,17 @@ def subscribe():
 def rooms_tariff():
     return render_template('rooms-tariff.html')
 
+
+@app.route('/reserva/<int:room_id>', methods=['POST'])
+def reserve(room_id):
+    checkin = request.form['checkin']
+    checkout = request.form['checkout']
+    guests = request.form['guests']
+    # Aquí procesarías los datos de la reserva
+    return f"Reserva hecha para la Habitación: {room_id} desde {checkin} al {checkout} para {guests} invitado(s)."
+
+
+
 @app.route('/hotels')
 def hotels():
     # Simulación de datos de hoteles (esto podría venir de una base de datos)
@@ -28,31 +39,48 @@ def hotels():
     ]
     return render_template('hotels.html', hotels=hotels)  # Renderiza la plantilla de hoteles
 
-@app.route('/room-details/<int:room_id>')
-def room_details(room_id):
-    # Simulación de datos de habitaciones (esto podría venir de una base de datos)
-    rooms = {
-        1: {
-            'title': 'Luxurious Suites',
-            'images': ['8.jpg', '9.jpg', '10.jpg'],
-            'description': 'Descripción de la suite lujosa...',
-            'size': '44 sq',
-            'price': '$200.00',
-            'amenities': [
-                'Una de las mayores barreras para hacer la venta es su perspectiva.',
-                'Principio para trabajar y ganar más dinero mientras se divierte más.',
-                'Personas desafortunadas. No se obstine.',
-                'Espacio en su casa Cómo vender más rápido que sus vecinos.'
-            ]
+@app.route('/room-details')
+def room_details():
+    rooms = [
+        {
+            'id': 1,
+            'title': 'Opción Single',
+            'images': ['1.jpg', '2.jpg'],
+            'description': 'Una habitación lujosa con vista al mar. Para uno.',
+            'amenities': ['WiFi', 'TV', 'Aire acondicionado'],
+            'size': '35 m²',
+            'price': '$150usd Por Noche'
         },
-        # Agrega más habitaciones según sea necesario
-    }
+        {
+            'id': 2,
+            'title': 'Opción Doble',
+            'images': ['3.jpg', '4.jpg'],
+            'description': 'Perfecta para parejas, con mucho espacio.',
+            'amenities': ['WiFi', 'TV', 'Balcón'],
+            'size': '50 m²',
+            'price': '$200usd Por Noche'
+        },
+        {
+            'id': 3,
+            'title': 'Opción Triple',
+            'images': ['5.jpg', '6.jpg'],
+            'description': 'Ideal para un viaje de amigos.',
+            'amenities': ['WiFi', 'Escritorio', 'TV'],
+            'size': '70 m²',
+            'price': '$400usd Por Noche'
+        },
+        {
+            'id': 4,
+            'title': 'Opción Familiar',
+            'images': ['7.jpg', '8.jpg'],
+            'description': 'Experiencia de lujo para toda la familia.',
+            'amenities': ['WiFi', 'Jacuzzi', 'Servicio de habitaciones'],
+            'size': '120 m²',
+            'price': '$1000'
+        }
+    ]
+    return render_template('room-details.html', rooms=rooms)
 
-    room = rooms.get(room_id)
-    if room is None:
-        return "Room not found", 404
-
-    return render_template('room-details.html', room=room)
 
 @app.route('/introduction')
 def introduction():
