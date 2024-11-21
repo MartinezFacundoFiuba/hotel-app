@@ -20,5 +20,7 @@ fi
 pip install flask
 pip install flask_sqlalchemy
 pip install mysql-connector-python
+pip install flask-cors
+pip install requests
 
 echo "Dependencias instaladas correctamente :)"

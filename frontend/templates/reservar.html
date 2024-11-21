@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Reservar Habitación</h2>
+    <form action="{{ url_for('formularioenviado') }}" method="post" >
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="email">Email :</label>
+        <input type="text" id="email" name="email" required><br><br>
+
+        <label for="inicio">Fecha de Inicio:</label>
+        <input type="date" id="inicio" name="inicio" required><br><br>
+
+        <label for="final">Fecha de Fin:</label>
+        <input type="date" id="final" name="final" required><br><br>
+
+        <input type="hidden" id="id_habitacion" name="id_habitacion" value="{{ room_id }}">
+        <input type="hidden" id="id_hotel" name="id_hotel" value="{{ hotel_id }}">
+
+        <input type="submit" value="Reservar">
+    </form>
+</div>
+{% endblock %}

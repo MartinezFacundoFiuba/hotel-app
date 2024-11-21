@@ -6,21 +6,16 @@
 
     <!-- form -->
     <div class="row">
-        {% set hotels = [
-            {'id': 1, 'image': 'hotel1.jpg', 'title': 'Hotel Maravilla', 'description': 'Un lugar de ensueño para tus vacaciones.'},
-            {'id': 2, 'image': 'hotel2.jpg', 'title': 'Hotel Paraíso', 'description': 'Disfruta de la mejor experiencia de hospedaje.'},
-            {'id': 3, 'image': 'hotel3.jpg', 'title': 'Hotel Sol', 'description': 'Relájate en un ambiente acogedor y familiar.'},
-            {'id': 4, 'image': 'hotel4.jpg', 'title': 'Hotel Luna', 'description': 'Un refugio perfecto para escapadas románticas.'}
-        ] %}
-
         {% for hotel in hotels %}
         <div class="col-sm-6 wowload fadeInUp">
             <div class="hotel">
                 <img src="{{ url_for('static', filename='images/photos/' ~ hotel.image) }}" class="img-responsive">
                 <div class="info">
-                    <h3>{{ hotel.title }}</h3>
-                    <p>{{ hotel.description }}</p>
-                    <a href="{{ url_for('/habitaciones') }}" class="btn btn-default">Ver Habitaciones</a> <!-- Redirige a las habitaciones -->
+                    <h3>{{ hotel.nombre }}</h3>
+                    <p>Provincia: {{ hotel.provincia }}</p>
+                    <p>Ciudad: {{ hotel.ciudad }}</p>
+                    <p>Empresa: {{ hotel.empresa }}</p>
+                    <a href="{{ url_for('habitaciones', hotel_id=hotel.id) }}" class="btn btn-default">Ver Habitaciones</a>
                 </div>
             </div>
         </div>

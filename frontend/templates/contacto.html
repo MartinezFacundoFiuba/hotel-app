@@ -12,10 +12,10 @@
                 <div class="col-sm-6 col-sm-offset-3">
                     <div class="spacer">   		        	
                         
-                        <form id action="/mensajes" method="post">
-                            <h2 class="titulo">Escribenos </h2>
+                        <form id="contact-form" action="/mensajes" method="post">
+                            <h2 class="titulo">Escríbenos</h2>
                             <div class="form_input">
-                                <label for="nombre-de-usuario">Nombre de Usuario</label>
+                                <label for="nombre-usuario">Nombre de Usuario</label>
                                 <input type="text" placeholder="Usuario1233" id="nombre-usuario" name="usuario" required>
                             </div>
                             <div class="form_input">
@@ -27,12 +27,13 @@
                                 <input type="tel" id="telefono" placeholder="12345678" name="telefono" maxlength="16">
                             </div>
                             <div class="form_input">
-                                <label for="Mensaje">Mensaje:</label>                          
-                                <textarea class="form_textarea" placeholder="Mensaje" cols="10" rows="4"></textarea>
+                                <label for="mensaje">Mensaje:</label>                          
+                                <textarea class="form_textarea" id="mensaje" placeholder="Mensaje" cols="10" rows="4"></textarea>
                             </div>
                             <div class="form_input">
                                 <button type="submit" id="boton-formulario">Enviar</button>
                             </div>
+                        </form>
                     </div>
                 </div>
             </div>
