@@ -1,26 +1,23 @@
-<!-- hotel-app/frontend/templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hotel App</title>
+    <title>Integrando hoteles</title>
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Raleway:300,500,800|Old+Standard+TT' rel='stylesheet' type='text/css'>
     <!-- Font Awesome -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <!-- Uniform -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/uniform/css/uniform.default.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/uniform.default.min.css') }}">
     <!-- Animate.css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/wow/animate.css') }}">
-    <!-- Gallery -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/gallery/blueimp-gallery.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animate.css') }}">
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/x-icon">
     <!-- Estilo Personalizado -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='assets/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div id="header">
@@ -32,8 +29,8 @@
         <div class="welcome-message">
             <div class="wrap-info">
                 <div class="information">
-                    <h1 class="animated fadeInDown">Best hotel in Dubai</h1>
-                    <p class="animated fadeInUp">Most luxurious hotel of Asia with the royal treatments and excellent customer service.</p>                
+                    <h1 class="animated fadeInDown">Mejores hoteles de buenos aires</h1>
+                    <p class="animated fadeInUp">Los mejores hoteles de CABA en un solo sitio.</p>                
                 </div>
                 <a href="#information" class="arrow-nav scroll wowload fadeInDownBig"><i class="fa fa-angle-down"></i></a>
             </div>
@@ -43,19 +40,26 @@
     <div id="content">
         {% block content %}
         <div class="container">
-            <h1>Bienvenido a nuestra aplicación de hoteles</h1>
+            <h1>Bienvenido a nuestro sitio web de hoteles</h1>
             <p>Explora nuestros hoteles y habitaciones.</p>
-            <a href="{{ url_for('hotels') }}" class="btn btn-primary">Ver Hoteles</a> <!-- Botón para ir a la página de hoteles -->
+            <a href="{{ url_for('hoteles') }}" class="btn btn-primary">Ver Hoteles</a> 
         </div>
         {% endblock %}
     </div>
+    <div id="main">
+        {% block main %}
+    
+
+        {% endblock %}
+      </div>
 
     <div id="footer">
         {% include 'footer.html' %} 
     </div>
 
-    <script src="{{ url_for('static', filename='assets/jquery.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.js') }}"></script>
-    <script src="{{ url_for('static', filename='assets/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/slide.js') }}"></script>
 </body>
 </html>
