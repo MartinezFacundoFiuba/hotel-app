@@ -15,11 +15,20 @@ def ubicaciones():
 @app.route('/contacto')
 def contacto():
     return render_template('contacto.html')
-@app.route('/registrar_propietario')
+@app.route('/registrar_propietario',methods = ["POST","GET"])
 def registro_propietario():
-    return render_template('registrar_propietario.html')
+    if request.method == 'POST':
+        return redirect(url_for('formulario_enviado'))
+    else:
+        return render_template('registrar_propietario.html')
 @app.route('/registro')
 def registro():
     return render_template('registro.html')
+@app.route('/formulario_enviado')
+def formulario_enviado():
+    return render_template('formulario_enviado.html')
+@app.route("/iniciar_sesion")
+def iniciar_sesion():
+    return render_template("inicio.html")
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run(debug=True, port=5000)

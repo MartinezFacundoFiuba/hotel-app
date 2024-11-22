@@ -1,7 +1,8 @@
-from flask import Flask, render_template,url_for,redirect,request,jsonify
+from flask import *
 from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+from flask_cors import CORS
 app = Flask(__name__)
 #-----------------------------coneccion a la base de datos-----------------------------
 def set_connection():
@@ -19,6 +20,7 @@ def set_connection():
 #-------------------------SECTOR DE ALMACENAMIENTO DE DATOS-------------------------
 
 #---------------------------almacenar propietarios ---------------------------------
+CORS(app)
 @app.route("/propietario",methods = ['POST'])
 def agregar_nuevo_propietario():
     conn = set_connection()
@@ -31,7 +33,7 @@ def agregar_nuevo_propietario():
         conn.commit() #"confirmar" cambios a la base
         conn.close() #cerrando conexion SQL
         result.close() #cerrando conexion de la base 
-        return jsonify({"mensaje":"Datos recibidos correctamente"}),200
+        return jsonify({'message': 'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar hoteles ---------------------------------
@@ -47,7 +49,7 @@ def agregar_nuevo_hotel():
         conn.commit()
         conn.close() 
         result.close() 
-        return jsonify({"mensaje":"Datos recibidos correctamente"}),200
+        return jsonify({"mensaje":'Datos recibidos correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar habitaciones ---------------------------------
@@ -72,7 +74,7 @@ def agregar_hospedaje():
     conn = set_connection()
     result = conn
     datos = request.get_json()
-    query=f"""INSERT INTO DISPONIBILIDAD (fecha,habitacion,hotel,fecha_inicial,fecha_final,usuario) 
+    query=f"""INSERT INTO DISPONIBILIDAD (habitacion,hotel,fecha_inicial,fecha_final,usuario) 
     VALUES ('{datos["fecha"]}','{datos["habitacion"]}','{datos["hotel"]}','{datos["fecha_inicial"]}','{datos["fecha_final"]}','{datos["usuario"]}');"""
     try:
         result.execute(text(query))
@@ -155,7 +157,7 @@ def hoteles():
     return jsonify(data),200
 #------------------------- consulta propietarios------------------------------------
 @app.route('/propietarios',methods=["GET"])
-def hoteles():
+def propietarios():
     conn=set_connection()
     data=[]
     query="SELECT * FROM PROPIETARIOS;"
@@ -334,6 +336,29 @@ def eliminar_habitacion(id):
     except SQLAlchemyError as err:
         return jsonify({'message':'Se ha producido un error ' + str(err.__cause__)})
     return jsonify({'message':'Se ha eliminado correctamente'}), 200
+@app.route("/iniciar_sesion", methods=["POST"])
+def login():
+    datos = request.get_json()
+    if "email" not in datos or "contraseña" not in datos:
+        return jsonify({"mensaje": "Correo o contraseña faltantes"}), 400
+    conn = set_connection()
+    query = f"SELECT email, contraseña FROM PROPIETARIOS WHERE email = '{datos["email"]}'"  
+    try:
+        print((datos["email"]))
+        result = conn.execute(text(query))
+        resultado = result.fetchall()
+        print(resultado)
+        if result is None:
+            return jsonify({"mensaje": "Correo o contraseña incorrectos"}), 403
+        if result:
+            return jsonify({"mensaje": "Inicio de sesión exitoso"}), 200
+        else:
+            return jsonify({"mensaje": "Correo o contraseña incorrectos"}), 402
+
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje': "Se ha producido un error al recibir los datos: " + str(err)}), 500
+    finally:
+        conn.close()
 if __name__ == '__main__':
    app.run("127.0.0.1",debug=True, port=5002)
 
