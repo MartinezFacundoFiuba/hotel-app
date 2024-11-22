@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{%block main%}
+<div id="formulario_propietario">
+<form  action="{{url_for('formulario_enviado')}}" method="post" id="formpropietario2">
+    <ul>
+        <li>
+            <label for="nombre">Ingrese su nombre:</label>
+            <br>
+            <input type="text" id="nombre" name="nombre" placeholder="manuel">
+        </li>
+        <li>
+            <label for="apellido">Ingrese su apellido:</label>
+            <br>
+            <input type="text" id="apellido" name="apellido" placeholder="monteros">
+        </li>
+        <li>
+            <label for="email">Ingrese su mail:</label>
+            <br>
+            <input type="text" id="email" name="email" placeholder="juancito@gmail.com">
+        </li>
+        <li>
+            <label for="contraseña">Ingrese su contraseña</label>
+            <input type="text" id="contraseña" name="contraseña">
+        </li>
+        <li>
+            <label for="nombre_de_empresa">Ingrese el nombre de su empresa</label>
+            <br>
+            <input type="text" id="email" placeholder="Hoteles River" name="empresa">
+        </li>
+    </ul>
+    <button type="submit" id="boton-formulario">Enviar</button>
+</form>
+</div>
+{% endblock %}

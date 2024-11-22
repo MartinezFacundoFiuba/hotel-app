@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block main %}
+<div id="content">
+    {% block content %}
+    <div class="container">
+        <h1>Bienvenido al apartado de registro</h1>
+        <p>seleccione una de las siguientes opciones.</p>
+        <a href="{{ url_for('hoteles') }}" class="btn btn-primary">Ver Hoteles</a> 
+    </div>
+    {% endblock %}
+</div>
+<a href="{{ url_for('registro_propietario')}}" class="button">Haga click aqui para registrarse como propietario</a>
+<a href="{{ url_for('registro_propietario')}}" class="button">Haga click aqui para registrarse como usuario</a>
+<a href=""><button id="buton">hola</button></a>
+{% endblock %}
