@@ -10,5 +10,4 @@ Trabajo Práctico de Introducción al Desarrollo de Software, Facultad de Ingeni
 | Ricardo Manuel Rabanal Silva | 112352 | 
 | Mariano Torroba | 112957 | 
 | Facundo Martinez | 105996 | 
-| Xu Matias | 109938 |
-| Jose Angelo Delgado Castañeda | 112400 |
+
