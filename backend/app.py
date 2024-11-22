@@ -9,14 +9,11 @@ def set_connection():
     try:
         engine = create_engine("mysql+mysqlconnector://user1:lizi12@localhost/HOTEL")
         connection = engine.connect()
-        print("CONECCION")
         return connection
     except SQLAlchemyError as e:
         print(f"Error de coneccion :{e}")
         return None
 #------------------------------------------------------------------------------------
-
-
 #-------------------------SECTOR DE ALMACENAMIENTO DE DATOS-------------------------
 
 #---------------------------almacenar propietarios ---------------------------------
@@ -49,7 +46,7 @@ def agregar_nuevo_hotel():
         conn.commit()
         conn.close() 
         result.close() 
-        return jsonify({"mensaje":'Datos recibidos correctamente'}),200
+        return jsonify({'message': 'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar habitaciones ---------------------------------
@@ -65,7 +62,7 @@ def agregar_habitacion():
         conn.commit()
         conn.close()
         result.close() 
-        return jsonify({"mensaje":"Datos recibidos correctamente"}),200
+        return jsonify({'message': 'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar hospedajes ---------------------------------
@@ -81,7 +78,7 @@ def agregar_hospedaje():
         conn.commit()
         conn.close()
         result.close() 
-        return jsonify({"mensaje":"Datos recibidos correctamente"}),200
+        return jsonify({'message': 'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar usuario ---------------------------------
@@ -97,9 +94,9 @@ def agregar_usuario():
         conn.commit()
         conn.close()
         result.close() 
-        return jsonify({"mensaje":"Datos recibidos correctamente"}),200
+        return jsonify({'message': 'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
-        return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
+        return jsonify({'mensaje:': 'se a producido un error al enviar los datos' +str(err)}),500
 #-------------------------SECTOR DE CONSULTA DE DATOS-------------------------
 #------------------------- consulta usuarios------------------------------------
 @app.route('/usuarios',methods=["GET"])
@@ -120,6 +117,30 @@ def usuarios():
         dicc['dni']=row.dni
         data.append(dicc)
     return jsonify(data),200
+#------------------------- consulta usuarios por id------------------------------------
+@app.route('/usuario/<id>',methods=["GET"])
+def usuario(id):
+    conn=set_connection()
+    data=[]
+    query=f"SELECT * FROM USUARIOS WHERE id={id};"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'id':row[0],
+            'nombre':row[1],
+            'apellido':row[2],
+            'email':row[3],          
+            'contraseña':row[4],
+            'dni':row[5]
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
 #------------------------- consulta habitaciones------------------------------------
 @app.route('/habitaciones',methods=["GET"])
 def habitaciones():
@@ -155,6 +176,30 @@ def hoteles():
         dicc['empresa'] = row.empresa
         data.append(dicc)
     return jsonify(data),200
+#------------------------- consulta hoteles por id------------------------------------
+@app.route('/hoteles/<id>',methods=["GET"])
+def hotel(id):
+    conn=set_connection()
+    data=[]
+    query=f"SELECT * FROM USUARIOS WHERE id={id};"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'id':row[0],
+            'nombre':row[1],
+            'provincai':row[2],
+            'ciudad':row[3],          
+            'empresa':row[4],
+            'dni':row[5]
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
 #------------------------- consulta propietarios------------------------------------
 @app.route('/propietarios',methods=["GET"])
 def propietarios():
@@ -174,6 +219,30 @@ def propietarios():
         dicc['empresa']=row.empresa
         data.append(dicc)
     return jsonify(data),200
+#------------------------- consulta ropietarios por id------------------------------------
+@app.route('/propietarios/<id>',methods=["GET"])
+def propietario_perfil(id):
+    conn=set_connection()
+    data=[]
+    query=f"SELECT * FROM PROPIETARIOS WHERE id={id};"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'id':row[0],
+            'nombre':row[1],
+            'apellido':row[2],
+            'email':row[3],          
+            'contraseña':row[4],
+            'empresa':row[5]
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
 #------------------------- consulta hospedajes------------------------------------
 @app.route('/hospedaje',methods = ['GET'])
 def hospedajes():
@@ -194,6 +263,30 @@ def hospedajes():
         dicc['usuario']=row.usuario
         data.append(dicc)
     return jsonify(data),200
+#------------------------- consulta hospedajes por id------------------------------------
+@app.route('/hoespedaje/<id>',methods=["GET"])
+def hospedaje(id):
+    conn=set_connection()
+    data=[]
+    query=f"SELECT * FROM DISPONIBILIDAD WHERE id={id};"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'id':row[0],
+            'habitacion':row[1],
+            'hotel':row[2],
+            'fecha_inicial':row[3],          
+            'fecha_final':row[4],
+            'usuario':row[5]
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
 #----------------------------SECTOR DE MODIFICACION-------------------------
 #---------------------modificaciones propietario--------------------------
 @app.route('/propietario/<id>', methods=['PATCH'])
@@ -349,14 +442,14 @@ def login():
         resultado = result.fetchall()
         print(resultado)
         if result is None:
-            return jsonify({"mensaje": "Correo o contraseña incorrectos"}), 403
+            return jsonify({"mensaje": 'Correo o contraseña incorrectos'}), 403
         if result:
-            return jsonify({"mensaje": "Inicio de sesión exitoso"}), 200
+            return jsonify({"mensaje": 'Inicio de sesion exitoso'}), 200
         else:
-            return jsonify({"mensaje": "Correo o contraseña incorrectos"}), 402
+            return jsonify({"mensaje": 'Correo o contraseña incorrectos'}), 402
 
     except SQLAlchemyError as err:
-        return jsonify({'mensaje': "Se ha producido un error al recibir los datos: " + str(err)}), 500
+        return jsonify({'mensaje': 'Se ha producido un error al recibir los datos: ' + str(err)}), 500
     finally:
         conn.close()
 if __name__ == '__main__':
