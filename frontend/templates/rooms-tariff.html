@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Rooms & Tariff</h2>
+
+    <!-- form -->
+    <div class="row">
+        {% for room in rooms %}
+        <div class="col-sm-6 wowload fadeInUp">
+            <div class="rooms">
+                <img src="{{ url_for('static', filename='images/photos/' ~ room.image) }}" class="img-responsive" alt="{{ room.title }}">
+                <div class="info">
+                    <h3>Número de habitación: {{ room.habitacion }}</h3>
+                    <p>Precio: {{ room.precio }}</p>
+                    <p>Piso: {{ room.piso }}</p>
+                    <a href="{{ url_for('habitacion_detalles', hotel_id=room.hotel_id, room_id=room.id) }}" class="btn btn-default">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center">
+        <ul class="pagination">
+            <li class="disabled"><a href="#">«</a></li>
+            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">»</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

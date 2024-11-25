@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{%block main%}
+<div class="container">
+    <h2>Ubicaciones</h2>
+
+    <!-- form -->
+    <div class="row">
+        {% set hotels = [
+            {'id': 1, 'image': '1.jpg', 'title': 'Hotel Maravilla', 'description': 'Un lugar de ensueño para tus vacaciones.', 'ubicación': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.503702523016!2d-58.40563280000001!3d-34.5914224!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca9b2dd90e57%3A0x93d07d7011508dbe!2sArenales%20Suites!5e0!3m2!1ses-419!2sar!4v1731961707674!5m2!1ses-419!2sar'},
+            {'id': 2, 'image': '2.jpg', 'title': 'Hotel Paraíso', 'description': 'Disfruta de la mejor experiencia de hospedaje.', 'ubicación': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117957.05287917508!2d-58.571874535714706!3d-34.604330805460904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccab6dca54ea7%3A0xdbefb1c97acc6596!2sArgenta%20Tower%20Hotel!5e0!3m2!1ses-419!2sar!4v1731972419682!5m2!1ses-419!2sar'},
+            {'id': 3, 'image': '3.jpg', 'title': 'Hotel Sol', 'description': 'Relájate en un ambiente acogedor y familiar.', 'ubicación': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117957.05287917508!2d-58.571874535714706!3d-34.604330805460904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccad9d626532b%3A0x991ad39e9ed1b1d1!2sMonserrat%20Apart%20Hotel!5e0!3m2!1ses-419!2sar!4v1731972920371!5m2!1ses-419!2sar'},
+            {'id': 4, 'image': '4.jpg', 'title': 'Hotel Luna', 'description': 'Un refugio perfecto para escapadas románticas.', 'ubicación': 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d117957.05287917508!2d-58.571874535714706!3d-34.604330805460904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacba27001cd%3A0xe0f9b7c16c7447ab!2sEl%20Conquistador%20Hotel!5e0!3m2!1ses-419!2sar!4v1731973022178!5m2!1ses-419!2sar'}
+        ] %}
+
+        {% for hotel in hotels %}
+        <div class="col-sm-6 wowload fadeInUp">
+            <div class="hotel">
+                <div class="mapas">
+                    <iframe src="{{ hotel.ubicación }}"  width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                </div>
+                <div class="info">
+                    <h3>{{ hotel.title }}</h3>
+                    <p>{{ hotel.description }}</p>
+                    <a href="{{ url_for('habitaciones', hotel_id=hotel.id) }}" class="btn btn-default">Ver Habitaciones</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}

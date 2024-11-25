@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Integrando hoteles</title>
@@ -32,13 +32,18 @@
                     <h1 class="animated fadeInDown">Mejores hoteles de buenos aires</h1>
                     <p class="animated fadeInUp">Los mejores hoteles de CABA en un solo sitio.</p>                
                 </div>
+                <a href="#information" class="arrow-nav scroll wowload fadeInDownBig"><i class="fa fa-angle-down"></i></a>
             </div>
         </div>
     </div>
 
     <div id="content">
         {% block content %}
-        
+        <div class="container">
+            <h1>Bienvenido a nuestro sitio web de hoteles</h1>
+            <p>Explora nuestros hoteles y habitaciones.</p>
+            <a href="{{ url_for('hoteles') }}" class="btn btn-primary">Ver Hoteles</a> 
+        </div>
         {% endblock %}
     </div>
     <div id="main">

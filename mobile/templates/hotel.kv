@@ -1,0 +1,60 @@
+#:kivy 2.3.0
+
+<MyRoot>:
+    HotelScreen:
+    HotelPhotosScreen:
+
+<HotelScreen@Screen>:
+    main_title: integrar_hoteles_label
+
+    FloatLayout:
+        canvas.before:
+            Color:  
+                rgba: (0.8, 0.52, 0.25, 1) 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'assets/images/banner.jpg' 
+        Label:
+            id: integrar_hoteles_label
+            text: "Bienvenido a nuestra app mobile de INTEGRANDO HOTELES"
+            font_name: "assets/fonts/Montserrat-Bold.ttf"
+            font_size: 30
+            color: (1, 1, 1, 1)  
+            size_hint: None, None
+            size: self.texture_size
+            pos_hint: {'center_x': 0.5, 'top': 0.75}
+        Button:
+            text: "Ver Hoteles"
+            font_size: 20  
+            size_hint: (0.2, None)
+            height: 50
+            pos_hint: {'center_x': 0.5, 'y': 0.55}
+            on_press: root.manager.current = 'hotel_photos'
+        Widget:
+            size_hint_y: 1 
+
+<HotelPhotosScreen@Screen>:
+    FloatLayout:
+        canvas.before:
+            Color:  
+                rgba: (0.8, 0.52, 0.25, 1) 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'assets/images/banner.jpg' 
+        Label:
+            text: "Aquí van las fotos de los hoteles"
+            font_size: 30
+            pos_hint: {'center_x': 0.5, 'center_y': 0.95}
+            color: (1, 1, 1, 1)
+        Button:
+            text: "Volver"
+            size_hint: (0.2, None)
+            height: 50
+            pos_hint: {'center_x': 0.5, 'y': 0.05}
+            on_press: root.manager.current = 'hotel'
+            color: (1, 1, 1, 1)
+        BoxLayout:
+            id: hotel_container
+            orientation: 'vertical'

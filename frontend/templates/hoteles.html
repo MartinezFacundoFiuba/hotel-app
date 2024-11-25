@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Hoteles</h2>
+
+    <!-- form -->
+    <div class="row">
+        {% for hotel in hotels %}
+        <div class="col-sm-6 wowload fadeInUp">
+            <div class="hotel">
+                <img src="{{ url_for('static', filename='images/photos/' ~ hotel.image) }}" class="img-responsive">
+                <div class="info">
+                    <h3>{{ hotel.nombre }}</h3>
+                    <p>Provincia: {{ hotel.provincia }}</p>
+                    <p>Ciudad: {{ hotel.ciudad }}</p>
+                    <p>Empresa: {{ hotel.empresa }}</p>
+                    <a href="{{ url_for('habitaciones', hotel_id=hotel.id) }}" class="btn btn-default">Ver Habitaciones</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
