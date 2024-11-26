@@ -13,6 +13,7 @@ body{background-color: #fff;font-family: 'Raleway', sans-serif;font-size: 15px;l
     background-color:#AEAEAC;
 }
 
+
 #login-cliente {
 
     padding-bottom: 25px;
@@ -31,10 +32,12 @@ input {
 form {
     /*background: #ededed;*/
     padding: 0px 0;
+    width: 580px;
     max-width: 600px;
     margin: auto;
     box-shadow: 0px 0px 35px #0006;
     font-size: 20px;
+    color: #191919;
 }
 
 .form_input {
@@ -43,9 +46,14 @@ form {
 
 .titulo {
     text-align: center;
+    font-size: 40px;
     
 }
 
+.contacto-titulo {
+
+    font-size:50px ;
+}
 
 .form_textarea {
 
@@ -89,6 +97,60 @@ form {
 .link {
     color:#252423;
 }
+
+.titulo-registro {
+    text-align: center;
+    font-family: "Montserrat";
+    font-size: 50px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(30, 29, 29, 0.5);
+    color: #474747; 
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.boton1 {
+    display: inline-block;
+    padding: 15px;
+    border: none;
+    margin: auto;
+    margin-top: 20px;
+    margin-left: 120px;
+    margin-right:50px;
+    border-radius: 10px;
+    background-color: #6c6c6c5b;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+
+}
+
+
+.boton2 {
+    display: inline-block;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 65px;
+    border: none;
+    border-radius: 10px;
+    background-color: #6c6c6c5b ;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+.contenido {
+    font-size: 30px;
+    color: #252423;
+}
+
+.inicia-sesión {
+
+    text-align: center;
+    font-size: 50px;
+    color: #191919;
+}
+
+
 
 .btn,a,a:hover{text-decoration: none;-webkit-transition: all 0.3s ease-in-out;-moz-transition: all 0.3s ease-in-out;-ms-transition: all 0.3s ease-in-out;-o-transition: all 0.3s ease-in-out;transition: all 0.3s ease-in-out;outline:0 ;}
 

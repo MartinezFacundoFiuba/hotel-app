@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block main %}
-<p>Bienvenido al apartado de registro</p>
-<td><a href="{{ url_for('registro_propietario')}}" class="button">Haga click aqui para registrarse como propietario</a></td>
-<td><a href="{{ url_for('registro_inquilino')}}" class="button">Haga click aqui para registrarse como usuario</a></td>
-{% endblock %}
+
+<div class="titulo-registro"><p>Bienvenido al apartado de registro</p></div>
+
+<div class="boton1"><td ><a class="contenido" href="{{ url_for('registro_propietario')}}" class="button">Haga click aqui para registrarse como propietario</a></td></div>
+
+<div class="boton2"><td ><a class="contenido" href="{{ url_for('registro_inquilino')}}" class="button">Haga click aqui para registrarse como usuario</a></td>
+{% endblock %}</div>
