@@ -3,6 +3,10 @@ from sqlalchemy import create_engine
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from flask_cors import CORS
+from flask_login import login_user
+from flask_login import login_manager
+from flask import session
+import requests
 app = Flask(__name__)
 #-----------------------------coneccion a la base de datos-----------------------------
 def set_connection():
@@ -15,7 +19,6 @@ def set_connection():
         return None
 #------------------------------------------------------------------------------------
 #-------------------------SECTOR DE ALMACENAMIENTO DE DATOS-------------------------
-
 #---------------------------almacenar propietarios ---------------------------------
 CORS(app)
 @app.route("/propietario",methods = ['POST'])
@@ -30,7 +33,7 @@ def agregar_nuevo_propietario():
         conn.commit() #"confirmar" cambios a la base
         conn.close() #cerrando conexion SQL
         result.close() #cerrando conexion de la base 
-        return jsonify({'message': 'Se ha agregado correctamente'}),200
+        return jsonify({'message':'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar hoteles ---------------------------------
@@ -71,14 +74,15 @@ def agregar_hospedaje():
     conn = set_connection()
     result = conn
     datos = request.get_json()
+    print(datos)
     query=f"""INSERT INTO DISPONIBILIDAD (habitacion,hotel,fecha_inicial,fecha_final,usuario) 
-    VALUES ('{datos["fecha"]}','{datos["habitacion"]}','{datos["hotel"]}','{datos["fecha_inicial"]}','{datos["fecha_final"]}','{datos["usuario"]}');"""
+    VALUES ('{datos["habitacion"]}','{datos["hotel"]}','{datos["fecha_inicial"]}','{datos["fecha_final"]}','{datos["usuario"]}');"""
     try:
         result.execute(text(query))
         conn.commit()
         conn.close()
         result.close() 
-        return jsonify({'message': 'Se ha agregado correctamente'}),200
+        return jsonify({'message':'Se ha agregado correctamente'}),200
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al enviar los datos" +str(err)}),500
 #---------------------------almacenar usuario ---------------------------------
@@ -158,6 +162,29 @@ def habitaciones():
         dicc['precio'] = row.precio
         data.append(dicc)
     return jsonify(data),200
+#------------------------- consulta habitaciones por id------------------------------------
+@app.route('/habitaciones/<id>',methods=["GET"])
+def habitacion(id):
+    conn=set_connection()
+    data=[]
+    query=f"SELECT * FROM HABITACIONES WHERE id={id};"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    print(resultado)
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'id':row[0],
+            'piso':row[1],
+            'habitacion':row[2],
+            'precio':row[3],          
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
 #------------------------- consulta hoteles------------------------------------
 @app.route('/hoteles',methods=["GET"])
 def hoteles():
@@ -175,6 +202,7 @@ def hoteles():
         dicc['ciudad'] = row.ciudad
         dicc['empresa'] = row.empresa
         data.append(dicc)
+    print(data)
     return jsonify(data),200
 #------------------------- consulta hoteles por id------------------------------------
 @app.route('/hoteles/<id>',methods=["GET"])
@@ -255,16 +283,16 @@ def hospedajes():
         return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
     for row in result:
         dicc = {}
-        dicc['fecha'] = row.fecha
         dicc['habitacion'] = row.habitacion
         dicc['hotel'] = row.hotel
         dicc['fecha_inicial'] = row.fecha_inicial
         dicc['fecha_final']=row.fecha_final
         dicc['usuario']=row.usuario
         data.append(dicc)
+    print(data)
     return jsonify(data),200
 #------------------------- consulta hospedajes por id------------------------------------
-@app.route('/hoespedaje/<id>',methods=["GET"])
+@app.route('/hospedaje/<id>',methods=["GET"])
 def hospedaje(id):
     conn=set_connection()
     data=[]
@@ -429,22 +457,30 @@ def eliminar_habitacion(id):
     except SQLAlchemyError as err:
         return jsonify({'message':'Se ha producido un error ' + str(err.__cause__)})
     return jsonify({'message':'Se ha eliminado correctamente'}), 200
+#------------------inicio de sesion ------------------------------------------------
 @app.route("/iniciar_sesion", methods=["POST"])
 def login():
     datos = request.get_json()
     if "email" not in datos or "contraseña" not in datos:
         return jsonify({"mensaje": "Correo o contraseña faltantes"}), 400
     conn = set_connection()
-    query = f"SELECT email, contraseña FROM PROPIETARIOS WHERE email = '{datos["email"]}'"  
+    query = f"SELECT * FROM PROPIETARIOS WHERE email = '{datos["email"]}'"  
     try:
         print((datos["email"]))
         result = conn.execute(text(query))
         resultado = result.fetchall()
         print(resultado)
+        usuario = resultado
         if result is None:
-            return jsonify({"mensaje": 'Correo o contraseña incorrectos'}), 403
+            return jsonify({"mensaje": 'Correo o contraseña incorrectos'},), 403
         if result:
-            return jsonify({"mensaje": 'Inicio de sesion exitoso'}), 200
+            usuario_data = {
+            "id": resultado[0][0],
+            "email": resultado[0][1],
+            "nombre": resultado[0][2],
+            "apellido": resultado[0][3],
+        }
+            return jsonify({'message':'Se ha agregado correctamente'},usuario_data),200
         else:
             return jsonify({"mensaje": 'Correo o contraseña incorrectos'}), 402
 
@@ -453,5 +489,6 @@ def login():
     finally:
         conn.close()
 if __name__ == '__main__':
-   app.run("127.0.0.1",debug=True, port=5002)
+   app.run("127.0.0.1",debug=True, port=5003
+           )
 

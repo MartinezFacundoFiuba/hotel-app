@@ -1,48 +1,222 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="container">
-    <h1 class="title">{{ room.title }}</h1>
-
-    <!-- RoomDetails -->
-    <div id="RoomDetails" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for image in room.images %}
-            <div class="item {% if loop.first %}active{% endif %}">
-                <img src="{{ url_for('static', filename='images/photos/' ~ image) }}" class="img-responsive" alt="slide">
-            </div>
-            {% endfor %}
-        </div>
-        <!-- Controls -->
-        <a class="left carousel-control" href="#RoomDetails" role="button" data-slide="prev">
-            <i class="fa fa-angle-left"></i>
-        </a>
-        <a class="right carousel-control" href="#RoomDetails" role="button" data-slide="next">
-            <i class="fa fa-angle-right"></i>
-        </a>
+{% block main %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario con Fechas No Disponibles</title>
+  
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .calendar-header {
+            font-weight: bold;
+        }
+        .day {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .day.unavailable {
+            background-color: #f44336;
+            color: white;
+            cursor: not-allowed;
+        }
+        .day.selected {
+            background-color: green;
+            color: white;
+        }
+        .button-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    {{rooms}}
+    <h1>Calendario con Fechas No Disponibles</h1>
+    <div class="calendar">
+        <!-- Header -->
+        <div class="calendar-header">Lun</div>
+        <div class="calendar-header">Mar</div>
+        <div class="calendar-header">Mié</div>
+        <div class="calendar-header">Jue</div>
+        <div class="calendar-header">Vie</div>
+        <div class="calendar-header">Sáb</div>
+        <div class="calendar-header">Dom</div>
+        
+        <!-- Empty cells for the start of the month -->
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        
+        <!-- Days of the month -->
+        <div class="day" data-date="2024-11-01">1</div>
+        <div class="day" data-date="2024-11-02">2</div>
+        <div class="day" data-date="2024-11-03">3</div>
+        <div class="day" data-date="2024-11-04">4</div>
+        <div class="day" data-date="2024-11-05">5</div>
+        <div class="day" data-date="2024-11-06">6</div>
+        <div class="day" data-date="2024-11-07">7</div>
+        <div class="day" data-date="2024-11-08">8</div>
+        <div class="day" data-date="2024-11-09">9</div>
+        <div class="day" data-date="2024-11-10">10</div>
+        <div class="day" data-date="2024-11-11">11</div>
+        <div class="day" data-date="2024-11-12">12</div>
+        <div class="day" data-date="2024-11-13">13</div>
+        <div class="day" data-date="2024-11-14">14</div>
+        <div class="day" data-date="2024-11-15">15</div>
+        <div class="day" data-date="2024-11-16">16</div>
+        <div class="day" data-date="2024-11-17">17</div>
+        <div class="day" data-date="2024-11-18">18</div>
+        <div class="day" data-date="2024-11-19">19</div>
+        <div class="day" data-date="2024-11-20">20</div>
+        <div class="day" data-date="2024-11-21">21</div>
+        <div class="day" data-date="2024-11-22">22</div>
+        <div class="day" data-date="2024-11-23">23</div>
+        <div class="day" data-date="2024-11-24">24</div>
+        <div class="day" data-date="2024-11-25">25</div>
+        <div class="day" data-date="2024-11-26">26</div>
+        <div class="day" data-date="2024-11-27">27</div>
+        <div class="day" data-date="2024-11-28">28</div>
+        <div class="day" data-date="2024-11-29">29</div>
+        <div class="day" data-date="2024-11-30">30</div>
     </div>
-    <!-- RoomCarousel -->
 
-    <div class="room-features spacer">
-        <div class="row">
-            <div class="col-sm-12 col-md-5"> 
-                <p>{{ room.description }}</p>
-            </div>
-            <div class="col-sm-6 col-md-3 amenities"> 
-                <h3>Amenities</h3>    
-                <ul>
-                    {% for amenity in room.amenities %}
-                    <li>{{ amenity }}</li>
-                    {% endfor %}
-                </ul>
-            </div>  
-            <div class="col-sm-3 col-md-2">
-                <div class="size-price">Size<span>{{ room.size }}</span></div>
-            </div>
-            <div class="col-sm-3 col-md-2">
-                <div class="size-price">Price<span>{{ room.price }}</span></div>
-            </div>
-        </div>
+    <div class="button-container">
+        <button id="submit">Enviar Fechas Seleccionadas</button>
     </div>
-</div>
+
+    <script>
+        fetch('http://127.0.0.1:5003/hospedaje')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la consulta de hospedaje');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Aquí puedes acceder a los datos de las fechas disponibles
+            console.log(data); // Imprimir los datos de la API en la consola
+
+            // Por ejemplo, mostrar las fechas disponibles en el HTML
+            data.forEach(hospedaje => {
+                const habitacion = hospedaje.habitacion;
+                const hotel = hospedaje.hotel;
+                const fecha_inicial = hospedaje.fecha_inicial;
+                const fecha_final = hospedaje.fecha_final;
+                const usuario = hospedaje.usuario;
+
+                const listItem = document.createElement('li');
+                listItem.textContent = `Habitación: ${habitacion}, Hotel: ${hotel}, Desde: ${fecha_inicial} hasta: ${fecha_final}, Usuario: ${usuario}`;
+                document.getElementById('hospedaje-list').appendChild(listItem);
+                console.log(listItem)
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos de hospedaje:', error);
+        });
+        console.log(rooms)
+        const no_disponible = [
+            {
+                fecha_inicial: 'Sun, 24 Nov 2024 00:00:00 GMT',
+                fecha_final: 'Thu, 28 Nov 2024 00:00:00 GMT',
+                habitacion: 2,
+                hotel: 'HOLA',
+                usuario: 42777799
+            },            {
+                fecha_inicial: 'Sun, 1 Nov 2024 00:00:00 GMT',
+                fecha_final: 'Thu, 2 Nov 2024 00:00:00 GMT',
+                habitacion: 2,
+                hotel: 'HOLA',
+                usuario: 42777799
+            }
+        ];
+
+        const days = document.querySelectorAll('.day');
+        const selectedDates = [];
+
+        no_disponible.forEach(rango => {
+            const startDate = new Date(rango.fecha_inicial);
+            const endDate = new Date(rango.fecha_final);
+
+            days.forEach(day => {
+                const dayDate = new Date(day.dataset.date);
+
+                if (dayDate >= startDate && dayDate <= endDate) {
+                    day.classList.add('unavailable');
+                }
+            });
+        });
+
+        days.forEach(day => {
+            if (!day.classList.contains('unavailable')) {
+                day.addEventListener('click', () => {
+                    day.classList.toggle('selected');
+                    const date = day.dataset.date;
+                    const index = selectedDates.indexOf(date);
+
+                    if (index === -1) {
+                        selectedDates.push(date);
+                    } else {
+                        selectedDates.splice(index, 1);
+                    }
+                });
+            }
+        });
+
+        document.getElementById('submit').addEventListener('click', () => {
+    if (selectedDates.length > 0) {
+        const fecha_inicial = selectedDates[0];  // La primera fecha seleccionada
+        const fecha_final = selectedDates.length === 1 ? selectedDates[0] : selectedDates[selectedDates.length - 1];  // Si solo hay una fecha, la inicial y final son la misma
+
+        fetch('http://127.0.0.1:5003/hospedaje', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                habitacion: 2,  
+                hotel: 'HOLA', 
+                fecha_inicial: fecha_inicial,
+                fecha_final: fecha_final,
+                usuario: 42777799 
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Respuesta del servidor:', data);
+            alert('Fechas enviadas correctamente');
+        })
+        .catch(error => {
+            console.error('Error al enviar las fechas:', error);
+            alert('Error al enviar las fechas');
+        });
+    } else {
+        alert('No se han seleccionado fechas');
+    }
+});
+
+    </script>
+</body>
+</html>
+
 {% endblock %}

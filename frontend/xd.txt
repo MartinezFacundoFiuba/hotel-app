@@ -1,0 +1,214 @@
+/*coneccion para agregar propietario */
+document.getElementById('formpropietario').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('http://127.0.0.1:5002/propietario', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result.message.includes)
+        if (result.message.includes('Se ha agregado correctamente')) {
+            window.location.href = 'formulario_enviado';
+        } else {
+            alert('Error al enviar los datos: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al enviar los datos');
+    });
+});
+/*coneccion para agregar usuario */
+document.getElementById('formusuario').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('http://127.0.0.1:5002/usuario', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.message.includes('Se ha agregado correctamente')) {
+            window.location.href = 'formulario_enviado';
+        } else {
+            alert('Error al enviar los datos: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al enviar los datos');
+    });
+});
+/*coneccion para agregar hotel */
+document.getElementById('formhotel').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('http://127.0.0.1:5002/hoteles', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.message.includes('Se ha agregado correctamente')) {
+            window.location.href = 'formulario_enviado';
+        } else {
+            alert('Error al enviar los datos: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al enviar los datos');
+    });
+});
+/*coneccion para agregar hospedaje*/
+document.getElementById('formhospedaje').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('http://127.0.0.1:5002/hospedaje', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.message.includes('Se ha agregado correctamente')) {
+            window.location.href = 'formulario_enviado';
+        } else {
+            alert('Error al enviar los datos: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al enviar los datos');
+    });
+});
+/*coneccion para agregar habitacion */
+document.getElementById('formhabitacion').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('http://127.0.0.1:5002/habitacion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.message.includes('Se ha agregado correctamente')) {
+            window.location.href = 'formulario_enviado';
+        } else {
+            alert('Error al enviar los datos: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al enviar los datos');
+    });
+});
+/*coneccion para inicio de sesion usuario */
+function enviarFormularioPropietario(event) {
+    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario (recarga de página)
+
+    const formData = new FormData(event.target.form); // Obtener los datos del formulario desde el objeto del formulario
+    const data = Object.fromEntries(formData.entries()); // Convertir FormData a un objeto
+
+    // Realizar la solicitud POST usando fetch
+    fetch('http://127.0.0.1:5003/iniciar_sesion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Enviar los datos en formato JSON
+    })
+    .then(response => response.json()) // Procesar la respuesta JSON
+    .then(result => {
+        console.log(result.message); // Mostrar el mensaje de la respuesta
+        if (result.message.includes('Se ha agregado correctamente')) {
+            enviarResultado(result.data)
+            window.location.href = 'formulario_enviado'; // Redirigir a otra página si el formulario se envió correctamente
+            
+        } else {
+            alert('Error al enviar los datos: ' + result.message); // Mostrar un mensaje de error si la respuesta no es la esperada
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error); // Mostrar errores en la consola
+        alert('Error al enviar los datos'); // Mostrar un mensaje genérico de error
+    });
+}
+function enviarFormularioPropietario2(event) {
+    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario (recarga de página)
+
+    const formData = new FormData(event.target.form); // Obtener los datos del formulario desde el objeto del formulario
+    const data = Object.fromEntries(formData.entries()); // Convertir FormData a un objeto
+
+    // Realizar la solicitud POST usando fetch
+    fetch('http://127.0.0.1:5003/propietario', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // Enviar los datos en formato JSON
+    })
+    .then(response => response.json()) // Procesar la respuesta JSON
+    .then(result => {
+        console.log(result.message); // Mostrar el mensaje de la respuesta
+        if (result.message.includes('Se ha agregado correctamente')) {
+            window.location.href = 'formulario_enviado'; // Redirigir a otra página si el formulario se envió correctamente
+        } else {
+            alert('Error al enviar los datos: ' + result.message); // Mostrar un mensaje de error si la respuesta no es la esperada
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error); // Mostrar errores en la consola
+        alert('Error al enviar los datos'); // Mostrar un mensaje genérico de error
+    });
+}
+
+function enviarResultado(resultado) {
+    fetch('http://localhost:5000/otra_ruta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        resultado: resultado
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Respuesta del servidor:', data);
+    })
+    .catch(error => {
+      console.error('Error al enviar el resultado:', error);
+    });
+  }
