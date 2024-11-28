@@ -3,6 +3,7 @@
 <MyRoot>:
     HotelScreen:
     HotelPhotosScreen:
+    ReservationsScreen:
 
 <HotelScreen@Screen>:
     main_title: integrar_hoteles_label
@@ -31,6 +32,13 @@
             height: 50
             pos_hint: {'center_x': 0.5, 'y': 0.55}
             on_press: root.manager.current = 'hotel_photos'
+        Button:
+            text: "Ver Reservas"
+            font_size: 20  
+            size_hint: (0.2, None)
+            height: 50
+            pos_hint: {'center_x': 0.5, 'y': 0.45}
+            on_press: root.manager.current = 'reservas'
         Widget:
             size_hint_y: 1 
 
@@ -43,8 +51,12 @@
                 pos: self.pos
                 size: self.size
                 source: 'assets/images/banner.jpg' 
+        BoxLayout:
+            id: hotel_container
+            orientation: 'vertical'
         Label:
             text: "Aquí van las fotos de los hoteles"
+            font_name: "assets/fonts/Montserrat-Bold.ttf"
             font_size: 30
             pos_hint: {'center_x': 0.5, 'center_y': 0.95}
             color: (1, 1, 1, 1)
@@ -54,7 +66,30 @@
             height: 50
             pos_hint: {'center_x': 0.5, 'y': 0.05}
             on_press: root.manager.current = 'hotel'
-            color: (1, 1, 1, 1)
-        BoxLayout:
-            id: hotel_container
-            orientation: 'vertical'
+
+<ReservationsScreen@Screen>:
+    FloatLayout:
+        Label:
+            text: "Ingresa tu correo electrónico para ver tus reservas"
+            font_size: 20
+            pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+        TextInput:
+            id: email_input
+            hint_text: "Correo electrónico"
+            size_hint: (0.8, None)
+            height: 40
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+        Button:
+            text: "Ver Reservas"
+            size_hint: (0.3, None)
+            height: 50
+            pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+            on_press: app.load_reservations(email_input.text)
+        Button:
+            text: "Volver"
+            size_hint: (0.2, None)
+            height: 50
+            pos_hint: {'center_x': 0.5, 'y': 0.05}
+            on_press: 
+                root.manager.current = 'hotel'; app.clear_reservation_table() 
+        

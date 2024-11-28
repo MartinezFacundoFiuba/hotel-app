@@ -30,8 +30,8 @@ VALUES (:nombre, :provincia, :ciudad, :empresa);"""
 query_insert_habitacion = """INSERT INTO HABITACIONES (piso, habitacion, precio, hotel_id) 
 VALUES (:piso, :habitacion, :precio, :hotel_id);"""
 
-query_insert_hospedaje = """INSERT INTO DISPONIBILIDAD (fecha, habitacion, hotel, fecha_inicial, fecha_final, usuario) 
-VALUES (:fecha, :habitacion, :hotel, :fecha_inicial, :fecha_final, :usuario);"""
+query_insert_hospedaje = """INSERT INTO DISPONIBILIDAD (fecha, habitacion, hotel, fecha_inicial, fecha_final, usuario, email) 
+VALUES (:fecha, :habitacion, :hotel, :fecha_inicial, :fecha_final, :usuario, :email);"""
 
 query_insert_usuario = """INSERT INTO USUARIOS (nombre, apellido, email, contraseña, dni) 
 VALUES (:nombre, :apellido, :email, :contraseña, :dni);"""
@@ -44,10 +44,13 @@ query_select_habitacion = "SELECT * FROM HABITACIONES WHERE hotel_id = :hotel_id
 
 query_select_hoteles = "SELECT * FROM HOTELES;"
 
+query_select_hotel = "SELECT * FROM HOTELES WHERE id = :hotel_id;"
+
 query_select_propietarios = "SELECT * FROM PROPIETARIOS;"
 
 query_select_hospedajes = "SELECT * FROM DISPONIBILIDAD;"
 
+query_select_reservas = "SELECT * FROM DISPONIBILIDAD WHERE email = :email;"
 #---------------------------almacenar propietarios ---------------------------------
 @app.route("/propietario", methods=['POST'])
 def agregar_nuevo_propietario():
@@ -122,7 +125,6 @@ def agregar_usuario():
         return jsonify({'mensaje:': "se ha producido un error al enviar los datos: " + str(err)}), 500
     finally:
         conn.close()
-
 #-------------------------SECTOR DE CONSULTA DE DATOS-------------------------
 
 
@@ -203,6 +205,26 @@ def hoteles():
         data.append(dicc)
     return jsonify(data), 200
 
+#------------------------- consulta hoteles------------------------------------
+@app.route('/hoteles/<int:hotel_id>', methods=["GET"])
+def hotel_detalle(hotel_id):
+    conn = set_connection()
+    data = []
+    try:
+        result = conn.execute(text(query_select_hotel), {"hotel_id":hotel_id})
+        print(result)
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:': "se ha producido un error al recibir los datos: " + str(err)}), 500
+    for row in result:
+        dicc = {}
+        dicc['id'] = row.id
+        dicc['nombre'] = row.nombre
+        dicc['provincia'] = row.provincia
+        dicc['ciudad'] = row.ciudad
+        dicc['empresa'] = row.empresa
+        data.append(dicc)
+    return jsonify(data), 200
+
 #------------------------- consulta propietarios------------------------------------
 @app.route('/propietarios', methods=["GET"])
 def propietarios():
@@ -245,6 +267,29 @@ def hospedajes():
         data.append(dicc)
     return jsonify(data), 200
 
+#------------------------- consulta hospedajes por email------------------------------------
+@app.route('/reservas/<email>', methods=['GET'])
+def reservas(email):
+    email = email.strip()
+    conn = set_connection()
+    data = []
+    try:
+        result = conn.execute(text(query_select_reservas), {"email": email})
+        for row in result:
+            dicc = {
+                'id': row.id,
+                'fecha': row.fecha,
+                'habitacion': row.habitacion,
+                'hotel': row.hotel,
+                'fecha_inicial': row.fecha_inicial,
+                'fecha_final': row.fecha_final,
+                'usuario': row.usuario,
+                'estado': row.estado
+            }
+            data.append(dicc)
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:': "se ha producido un error al recibir los datos: " + str(err)}), 500
+    return jsonify(data), 200
 #----------------------------SECTOR DE MODIFICACION-------------------------
 
 #---------------------modificaciones propietario--------------------------

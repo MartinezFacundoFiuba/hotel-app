@@ -49,19 +49,84 @@ class HotelPhotosScreen(Screen):
         hotel_container.add_widget(text_container) 
         self.layout.add_widget(hotel_container)
 
+class ReservationsScreen(Screen):
+    pass
+
 class MyRoot(ScreenManager):
     def __init__(self, **kwargs):
         super(MyRoot, self).__init__(**kwargs)
         self.add_widget(HotelScreen(name='hotel'))
         self.add_widget(HotelPhotosScreen(name='hotel_photos'))
+        self.add_widget(ReservationsScreen(name='reservas'))
 
     def go_to_hotels(self):
         self.current = 'hotel_photos'
 
 class MainApp(App):
+    def __init__(self, **kwargs):
+        super(MainApp, self).__init__(**kwargs)
+        self.table_layout = None 
+
     def build(self):
+        self.layout = BoxLayout(orientation='vertical') 
         Builder.load_file('templates/hotel.kv') 
-        return MyRoot() 
+        self.layout.add_widget(MyRoot()) 
+        return self.layout  
+
+    def load_reservations(self, email):
+        url = f'http://127.0.0.1:5002/reservas/{email}'
+        response = requests.get(url)
+        if response.status_code == 200 and response.json() != []:
+            reservas = response.json()
+            self.show_reservations(reservas) 
+        else:
+            print("No se encontraron reservas para este correo.")
+            return False
+
+    def show_reservations(self, reservas):
+        self.table_layout = BoxLayout(orientation='vertical', size_hint_y=None)
+        self.table_layout.bind(minimum_height=self.table_layout.setter('height'))
+
+        headers = ['ID', 'Usuario', 'Hotel', 'Habitación', 'Fecha Inicial', 'Fecha Final', 'Estado', 'Cancelar']
+        header_layout = BoxLayout(size_hint_y=None, height=40)
+        for header in headers:
+            header_layout.add_widget(Label(text=header, bold=True, size_hint_x=None, width=175))
+        self.table_layout.add_widget(header_layout)
+
+        for reserva in reservas:
+            row_layout = BoxLayout(size_hint_y=None, height=40, spacing=25)
+            row_layout.add_widget(Label(text=str(reserva['id']), size_hint_x=None, width=150))
+            row_layout.add_widget(Label(text=str(reserva['usuario']), size_hint_x=None, width=150))
+            row_layout.add_widget(Label(text=str(reserva['hotel']), size_hint_x=None, width=150))
+            row_layout.add_widget(Label(text=str(reserva['habitacion']), size_hint_x=None, width=150))
+            row_layout.add_widget(Label(text=self.format_date(reserva['fecha_inicial']), size_hint_x=None, width=150))
+            row_layout.add_widget(Label(text=self.format_date(reserva['fecha_final']), size_hint_x=None, width=150))
+            row_layout.add_widget(Label(text=str(reserva['estado']), size_hint_x=None, width=150))
+            cancel_button = Button(text='Cancelar', size_hint_x=None, width=150)
+            cancel_button.bind(on_press=lambda instance, r=reserva, row=row_layout: self.cancel_reservation(r, row)) 
+            row_layout.add_widget(cancel_button)
+
+            self.table_layout.add_widget(row_layout) 
+
+        self.layout.add_widget(self.table_layout) 
+
+    def cancel_reservation(self, reserva, row_layout):
+        url = f'http://127.0.0.1:5002/hospedaje/{reserva["id"]}'
+        response = requests.delete(url)
+        if response.status_code == 200:
+            print(f"Reserva con ID {reserva['id']} cancelada correctamente.")
+            self.table_layout.remove_widget(row_layout) 
+        else:
+            print(f"Error al cancelar reserva con ID {reserva['id']}.")
+
+    def format_date(self, date_str):
+        from datetime import datetime
+        date_obj = datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S %Z')
+        return date_obj.strftime('%d %B %Y')
+
+    def clear_reservation_table(self):
+        self.layout.clear_widgets()
+        self.layout.add_widget(MyRoot())  
 
 if __name__ == '__main__':
     MainApp().run()

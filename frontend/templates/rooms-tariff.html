@@ -2,14 +2,13 @@
 
 {% block content %}
 <div class="container">
-    <h2>Rooms & Tariff</h2>
+    <h2 style="text-align: center; padding-top: 20px;">Habitaciones</h2>
 
-    <!-- form -->
     <div class="row">
         {% for room in rooms %}
         <div class="col-sm-6 wowload fadeInUp">
             <div class="rooms">
-                <img src="{{ url_for('static', filename='images/photos/' ~ room.image) }}" class="img-responsive" alt="{{ room.title }}">
+                <img src="{{ url_for('static', filename='images/photos/' ~ room.id|string ~ '.jpg') }}" class="img-responsive" alt="{{ room.title }}">
                 <div class="info">
                     <h3>Número de habitación: {{ room.habitacion }}</h3>
                     <p>Precio: {{ room.precio }}</p>
