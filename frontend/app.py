@@ -1,6 +1,7 @@
 from flask import Flask, render_template,session, request, redirect, url_for,session
 from flask_login import LoginManager 
 import requests
+from datetime import datetime, timedelta
 app = Flask(__name__)
 app.secret_key = "46934825"
 @app.route('/')
@@ -41,7 +42,27 @@ def reservar():
     response = requests.get(f'http://127.0.0.1:5003/hospedaje')
     rooms = response.json()
    
-    return render_template('room-details.html',rooms= rooms)
+    # Obtener el mes y año actuales
+    hoy = datetime.today()
+    mes = hoy.month
+    año = hoy.year
+
+    # Obtener el primer día del mes y el número de días en el mes
+    primer_dia = datetime(año, mes, 1)
+    ultimo_dia = datetime(año, mes + 1, 1) - timedelta(days=1)
+    dias_en_mes = (ultimo_dia - primer_dia).days + 1
+
+    # Crear una lista de días del mes para renderizar en el calendario
+    calendario = []
+    for dia in range(1, dias_en_mes + 1):
+        fecha = datetime(año, mes, dia).date()  # Fecha del día actual
+        calendario.append({
+            'fecha': fecha,
+            'disponible': fecha in rooms  # Verificar si la fecha está en el set de fechas disponibles
+        })
+    print(calendario)
+    unavailable_days = [ {'date': '2024-11-25'}, {'date': '2024-11-14'}, {'date': '2025-01-01'} ]
+    return render_template('room-details.html', unavailable_days=unavailable_days)
 
 @app.route('/formulario_enviado')
 def formulario_enviado():
