@@ -3,19 +3,27 @@
 {%block content%}
 <body class="cuerpo-del-formulario">
 <div id="formulario-propietario">
-<form id action="/" method="post">
+<form action="/" method="post">
     <h2 class="titulo">Formulario de propietario </h2>
     <div class="form_input">
-        <label for="nombre-de-propietario">Nombre de Propietario</label>
-        <input type="text" placeholder="Nombre y Apellido" id="nombre-propietario" name="usuario-propietario" >
+        <label for="nombre-de-propietario">Nombre</label>
+        <input type="text" placeholder="Nombre" id="nombre-propietario" name="nombre" required>
+    </div>
+    <div class="form_input">
+        <label for="apellido-de-propietario">Apellido</label>
+        <input type="text" placeholder="Apellido" id="apellido-propietario" name="apellido" required>
     </div>
     <div class="form_input">
         <label for="nombre-de-hotel">Hotel</label>
-        <input type="text" placeholder="Nombre Hotel" id="nombre-hotel" name="empresa">
+        <input type="text" placeholder="Nombre Hotel" id="nombre-hotel" name="empresa" required>
     </div>
     <div class="form_input">
         <label for="email">Email</label>
-        <input type="email" placeholder="ejemplo@gmail.com" id="email" name="correo">
+        <input type="email" placeholder="ejemplo@gmail.com" id="email" name="email" required>
+    </div>
+    <div class="form_input">
+        <label for="contraseña">Contraseña</label>
+        <input type="password" placeholder="Contraseña" id="contraseña" name="contraseña" required>
     </div>
     <div class="form_input">
         <button type="submit" id="boton-formulario">Enviar</button>

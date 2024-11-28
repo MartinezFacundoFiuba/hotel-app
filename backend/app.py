@@ -30,13 +30,15 @@ VALUES (:nombre, :provincia, :ciudad, :empresa);"""
 query_insert_habitacion = """INSERT INTO HABITACIONES (piso, habitacion, precio, hotel_id) 
 VALUES (:piso, :habitacion, :precio, :hotel_id);"""
 
-query_insert_hospedaje = """INSERT INTO DISPONIBILIDAD (fecha, habitacion, hotel, fecha_inicial, fecha_final, usuario, email) 
-VALUES (:fecha, :habitacion, :hotel, :fecha_inicial, :fecha_final, :usuario, :email);"""
+query_insert_hospedaje = """INSERT INTO DISPONIBILIDAD ( habitacion, hotel, fecha_inicial, fecha_final, usuario, email) 
+VALUES ( :habitacion, :hotel, :fecha_inicial, :fecha_final, :usuario, :email);"""
 
 query_insert_usuario = """INSERT INTO USUARIOS (nombre, apellido, email, contraseña, dni) 
-VALUES (:nombre, :apellido, :email, :contraseña, :dni);"""
+VALUES (:usuario, :apellido, :email, :contraseña, :dni);"""
 
 query_select_usuarios = "SELECT * FROM USUARIOS;"
+
+query_select_usuario = "SELECT * FROM USUARIOS WHERE email = :email;"
 
 query_select_habitaciones = "SELECT * FROM HABITACIONES WHERE hotel_id = :hotel_id;"
 
@@ -101,6 +103,7 @@ def agregar_habitacion():
 def agregar_hospedaje():
     conn = set_connection()
     datos = request.get_json()
+    print(datos)
     try:
         conn.execute(text(query_insert_hospedaje), datos)
         conn.commit()
@@ -116,6 +119,7 @@ def agregar_hospedaje():
 def agregar_usuario():
     conn = set_connection()
     datos = request.get_json()
+    print(datos)
     try:
         conn.execute(text(query_insert_usuario), datos)
         conn.commit()
@@ -145,6 +149,21 @@ def usuarios():
         dicc['email'] = row.email
         dicc['contraseña'] = row.contraseña
         dicc['dni'] = row.dni
+        data.append(dicc)
+    return jsonify(data), 200
+
+#------------------------- consulta usuario------------------------------------
+@app.route('/usuario/<email>', methods=["GET"])
+def usuario_email(email):
+    conn = set_connection()
+    data = []
+    try:
+        result = conn.execute(text(query_select_usuario), {"email": email})
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:': "se ha producido un error al recibir los datos: " + str(err)}), 500
+    for row in result:
+        dicc = {}
+        dicc['id'] = row.id
         data.append(dicc)
     return jsonify(data), 200
 

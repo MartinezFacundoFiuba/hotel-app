@@ -4,36 +4,61 @@ from datetime import datetime
 app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    print(request.form)
+    if request.method == 'POST' and 'empresa' in request.form and request.form['empresa']:
+        print(request.form)
+        try:
+            requests.post('http://127.0.0.1:5002/propietario', json=request.form)
+        except Exception as e:
+            print(f"Error al enviar datos a propietario: {e}")
+    elif request.method == 'POST':
+        print(request.form)
+        try:
+            requests.post('http://127.0.0.1:5002/usuario', json=request.form)
+        except Exception as e:
+            print(f"Error al enviar datos a usuario: {e}")
     return render_template('base.html')
 
 @app.route('/hoteles')
 def hoteles():
-    response = requests.get('http://127.0.0.1:5002/hoteles')
-    hotels = response.json()
+    try:
+        response = requests.get('http://127.0.0.1:5002/hoteles')
+        hotels = response.json()
+    except Exception as e:
+        print(f"Error al obtener hoteles: {e}")
+        hotels = []
     return render_template('hoteles.html', hotels=hotels)
 
 @app.route('/hotel_detalle/<int:hotel_id>')
 def hotel_detalle(hotel_id):
-    response = requests.get(f'http://127.0.0.1:5002/hoteles/{hotel_id}')
-    print(response.json())
-    hotel = response.json()
-    print(hotel)
+    try:
+        response = requests.get(f'http://127.0.0.1:5002/hoteles/{hotel_id}')
+        hotel = response.json()
+    except Exception as e:
+        print(f"Error al obtener detalles del hotel: {e}")
+        return "Error al obtener detalles del hotel", 500
     return render_template('hotel-detalle.html', hotel=hotel[0])
 
 @app.route('/habitaciones/<int:hotel_id>')
 def habitaciones(hotel_id):
-    response = requests.get(f'http://127.0.0.1:5002/habitaciones/{hotel_id}')
-    rooms = response.json()
+    try:
+        response = requests.get(f'http://127.0.0.1:5002/habitaciones/{hotel_id}')
+        rooms = response.json()
+    except Exception as e:
+        print(f"Error al obtener habitaciones: {e}")
+        rooms = []
     return render_template('rooms-tariff.html', rooms=rooms)
 
 @app.route('/habitacion_detalles/<int:hotel_id>/<int:room_id>')
 def habitacion_detalles(hotel_id, room_id):
-    response = requests.get(f'http://127.0.0.1:5002/habitaciones/{hotel_id}/{room_id}')
-    if response.status_code == 200:
-        room = response.json()
-    else:
-        return "Habitación no encontrada", 404
+    try:
+        response = requests.get(f'http://127.0.0.1:5002/habitaciones/{hotel_id}/{room_id}')
+        if response.status_code == 200:
+            room = response.json()
+        else:
+            return "Habitación no encontrada", 404
+    except Exception as e:
+        print(f"Error al obtener detalles de la habitación: {e}")
+        return "Error al obtener detalles de la habitación", 500
     return render_template('room-details.html', room=room[0])
 
 @app.route('/contacto')
@@ -58,16 +83,24 @@ def registro():
 
 @app.route('/reservas')
 def reservas():
-    response = requests.get('http://127.0.0.1:5002/hospedaje')
-    if response.status_code == 200:
-        reservas = response.json()
-    else:
+    try:
+        response = requests.get('http://127.0.0.1:5002/hospedaje')
+        if response.status_code == 200:
+            reservas = response.json()
+        else:
+            reservas = []
+    except Exception as e:
+        print(f"Error al obtener reservas: {e}")
         reservas = []
     return render_template('reservas.html', reservas=reservas)
 
 @app.route('/formularioenviado', methods=['POST'])
 def formularioenviado():
     print(request.form)
+    def obtener_id_usuario(email):
+        response = requests.get(f'http://127.0.0.1:5002/usuario/{email}')
+        usuarios = response.json()
+        return usuarios[0]['id']
     nombre = request.form['nombre']
     apellido = request.form['apellido']
     fecha_inicial = request.form['inicio']
@@ -76,7 +109,16 @@ def formularioenviado():
     habitacion = request.form['id_habitacion']
     hotel = request.form['id_hotel']
     email = request.form['email']
-    usuario = 2 # agregar nombre apellido y mail a las reservas en bbdd, para conseguir el id user con esos datos
+    usuario = obtener_id_usuario(email)
+    solicitud = {
+        "usuario": usuario,
+        "fecha_inicial": fecha_inicial,
+        "fecha_final": fecha_final,
+        "habitacion": habitacion,
+        "hotel": hotel,
+        "email": email
+    }
+    requests.post('http://127.0.0.1:5002/hospedaje', json=solicitud)
     return render_template('formularioenviado.html')
 
 @app.route('/inicio_sesión')
