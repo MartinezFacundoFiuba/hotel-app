@@ -2,9 +2,9 @@
 # Inicialización del entorno virtual y las dependencias
 
 # Crear un entorno virtual
-# python3.10 -m venv venv 
+python3.10 -m venv venv 
 # En mi caso como tengo muchas versiones de python, uso la siguiente linea:
-/c/Users/Facu/AppData/Local/Programs/Python/Python310/python.exe -m venv venv
+#/c/Users/Facu/AppData/Local/Programs/Python/Python310/python.exe -m venv venv
 # Activar el entorno virtual
 # Comprobación del sistema operativo
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
