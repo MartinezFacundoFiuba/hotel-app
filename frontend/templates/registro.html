@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="titulo-registro"><p>Bienvenido al apartado de registro</p></div>
+    <div class="contenedor-botones">
+        <div class="boton1"><td ><a class="contenido" href="{{ url_for('registro_propietario')}}" class="button">Haga click aqui para registrarse como propietario</a></td></div>
+        <div class="boton2"><td ><a class="contenido" href="{{ url_for('registro_inquilino')}}" class="button">Haga click aqui para registrarse como usuario</a></td></div>
+    </div>
+</div>
+{% endblock %}

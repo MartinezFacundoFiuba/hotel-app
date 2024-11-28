@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="title" >Detalles de la habitación</h1>
+
+    <div class="room-features spacer" >
+        <div class="row">
+            <div class="col-sm-12 col-md-5"> 
+                <img src="{{ url_for('static', filename='images/photos/' ~ room.id|string ~ '.jpg') }}" class="img-responsive" style="padding-bottom: 20px;" alt="slide">
+            </div>
+            <div class="col-sm-12 col-md-7">
+                <div>
+                    <p>Piso: {{ room.piso }}</p>
+                    <p>Número de habitación: {{ room.habitacion }}</p>
+                    <p>Precio: {{ room.precio }}</p>
+                    <a href="{{ url_for('reservar', room_id=room.id, hotel_id=room.hotel_id) }}" class="btn btn-default" >Reservar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

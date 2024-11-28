@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="contacto-titulo" style="padding-top: 20px;">Contactos</h1>
+    <div class="contact">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9933.460884430251!2d-0.13301252240929382!3d51.50651527467666!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C+UK!5e0!3m2!1sen!2snp!4v1414314152341" width="100%" height="300" frameborder="0"></iframe>	
+                </div>
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="spacer">   		        	
+                        <div class="foro-de-contacto">
+                        <form id="contact-form" action="/mensajes" method="post">
+                            <h2 class="titulo">Escríbenos</h2>
+                            <div class="form_input">
+                                <label for="nombre-usuario">Nombre de Usuario</label>
+                                <input type="text" placeholder="Usuario1233" id="nombre-usuario" name="usuario" required>
+                            </div>
+                            <div class="form_input">
+                                <label for="email">Email:</label>
+                                <input type="email" placeholder="ejemplo@gmail.com" id="email" name="correo" required maxlength="100">
+                            </div>
+                            <div class="form_input">
+                                <label for="telefono">Teléfono:</label>
+                                <input type="tel" id="telefono" placeholder="12345678" name="telefono" maxlength="16">
+                            </div>
+                            <div class="form_input">
+                                <label for="mensaje">Mensaje:</label>                          
+                                <textarea class="form_textarea" id="mensaje" placeholder="Mensaje" cols="10" rows="4"></textarea>
+                            </div>
+                            <div class="form_input">
+                                <button type="submit" id="boton-formulario">Enviar</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

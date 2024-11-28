@@ -1,0 +1,39 @@
+1. Crear un nuevo hotel
+   - Acción: POST
+   - Descripción: Este servicio permitirá agregar un nuevo hotel a la base de datos.
+
+2. Obtener la lista de hoteles
+   - Acción: GET
+   - Descripción: Este servicio devolverá una lista de todos los hoteles disponibles.
+
+3. Obtener detalles de un hotel específico
+   - Acción: GET
+   - Descripción: Este servicio proporcionará información detallada sobre un hotel en particular, utilizando su ID.
+
+4. Actualizar información de un hotel
+   - Acción: PUT
+   - Descripción: Este servicio permitirá actualizar los detalles de un hotel existente.
+
+5. Eliminar un hotel
+   - Acción: DELETE
+   - Descripción: Este servicio eliminará un hotel de la base de datos utilizando su ID.
+
+6. Crear una nueva reserva
+   - Acción: POST
+   - Descripción: Este servicio permitirá a los usuarios crear una nueva reserva en un hotel.
+
+7. Obtener reservas de un usuario
+   - Acción: GET
+   - Descripción: Este servicio devolverá todas las reservas realizadas por un usuario específico.
+
+8. Actualizar una reserva
+   - Acción: PUT
+   - Descripción: Este servicio permitirá modificar los detalles de una reserva existente.
+
+9. Cancelar una reserva
+   - Acción: DELETE
+   - Descripción: Este servicio eliminará una reserva existente.
+
+10. Obtener servicios disponibles en un hotel
+    - Acción: GET
+    - Descripción: Este servicio devolverá una lista de servicios que ofrece un hotel específico.
