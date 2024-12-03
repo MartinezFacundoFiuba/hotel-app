@@ -221,6 +221,7 @@ def hoteles():
         return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
     for row in result:
         dicc = {}
+        dicc['id'] = row.id
         dicc['nombre'] = row.nombre
         dicc['provincia'] = row.provincia
         dicc['ciudad'] = row.ciudad
@@ -570,12 +571,14 @@ def coordenadas():
     conn=set_connection()
     data=[]
     query="SELECT * FROM HOTELES;"
+    print("hola")
     try:
         result= conn.execute(text(query))
     except SQLAlchemyError as err:
         return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
     for row in result:
         dicc = {}
+        dicc["id"]=row.id
         dicc['latitud'] = row.latitud
         dicc['longitud'] = row.longitud
         data.append(dicc)
