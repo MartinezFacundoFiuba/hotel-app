@@ -74,7 +74,7 @@ class MainApp(App):
         return self.layout  
 
     def load_reservations(self, email):
-        url = f'http://127.0.0.1:5002/reservas/{email}'
+        url = f'http://127.0.0.1:5002/hospedaje/{email}'
         response = requests.get(url)
         if response.status_code == 200 and response.json() != []:
             reservas = response.json()
@@ -92,7 +92,7 @@ class MainApp(App):
         for header in headers:
             header_layout.add_widget(Label(text=header, bold=True, size_hint_x=None, width=175))
         self.table_layout.add_widget(header_layout)
-
+        print(reservas, "Reservas")
         for reserva in reservas:
             row_layout = BoxLayout(size_hint_y=None, height=40, spacing=25)
             row_layout.add_widget(Label(text=str(reserva['id']), size_hint_x=None, width=150))
@@ -121,7 +121,7 @@ class MainApp(App):
 
     def format_date(self, date_str):
         from datetime import datetime
-        date_obj = datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S %Z')
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
         return date_obj.strftime('%d %B %Y')
 
     def clear_reservation_table(self):

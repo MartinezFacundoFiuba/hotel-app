@@ -21,20 +21,20 @@ def set_connection():
 
 #-------------------------SECTOR DE ALMACENAMIENTO DE DATOS-------------------------
 # Consultas SQL definidas fuera de las funciones
-query_insert_propietario = """INSERT INTO PROPIETARIOS (nombre, apellido, email, contraseña, empresa) 
-VALUES (:nombre, :apellido, :email, :contraseña, :empresa);"""
+query_insert_propietario = """INSERT INTO USUARIOS (nombre, apellido, email, contraseña, empresa, rol) 
+VALUES (:nombre, :apellido, :email, :contraseña, :empresa, :rol);"""
 
-query_insert_hotel = """INSERT INTO HOTELES (nombre, provincia, ciudad, empresa) 
-VALUES (:nombre, :provincia, :ciudad, :empresa);"""
+query_insert_hotel = """INSERT INTO HOTELES (nombre, provincia, ciudad, latitud, longitud, propietario_id) 
+VALUES (:nombre, :provincia, :ciudad, :latitud, :longitud, :propietario_id);"""
 
 query_insert_habitacion = """INSERT INTO HABITACIONES (piso, habitacion, precio, hotel_id) 
 VALUES (:piso, :habitacion, :precio, :hotel_id);"""
 
-query_insert_hospedaje = """INSERT INTO DISPONIBILIDAD ( habitacion, hotel, fecha_inicial, fecha_final, usuario, email) 
-VALUES ( :habitacion, :hotel, :fecha_inicial, :fecha_final, :usuario, :email);"""
+query_insert_hospedaje = """INSERT INTO DISPONIBILIDAD ( habitacion_id, hotel_id, fecha_inicial, fecha_final, usuario_id, email) 
+VALUES ( :habitacion_id, :hotel_id, :fecha_inicial, :fecha_final, :usuario_id, :email);"""
 
-query_insert_usuario = """INSERT INTO USUARIOS (nombre, apellido, email, contraseña, dni) 
-VALUES (:usuario, :apellido, :email, :contraseña, :dni);"""
+query_insert_usuario = """INSERT INTO USUARIOS (nombre, apellido, email, contraseña, rol) 
+VALUES (:nombre, :apellido, :email, :contraseña, :rol);"""
 
 query_select_usuarios = "SELECT * FROM USUARIOS;"
 
@@ -53,6 +53,8 @@ query_select_propietarios = "SELECT * FROM PROPIETARIOS;"
 query_select_hospedajes = "SELECT * FROM DISPONIBILIDAD;"
 
 query_select_reservas = "SELECT * FROM DISPONIBILIDAD WHERE email = :email;"
+
+query_select_hospedajes_hotel_habitacion = "SELECT * FROM DISPONIBILIDAD WHERE hotel_id = :hotel_id AND habitacion_id = :room_id;"
 #---------------------------almacenar propietarios ---------------------------------
 @app.route("/propietario", methods=['POST'])
 def agregar_nuevo_propietario():
@@ -73,6 +75,7 @@ def agregar_nuevo_propietario():
 def agregar_nuevo_hotel():
     conn = set_connection()
     datos = request.get_json()
+    print(datos)
     try:
         conn.execute(text(query_insert_hotel), datos)
         conn.commit()
@@ -148,7 +151,6 @@ def usuarios():
         dicc['apellido'] = row.apellido
         dicc['email'] = row.email
         dicc['contraseña'] = row.contraseña
-        dicc['dni'] = row.dni
         data.append(dicc)
     return jsonify(data), 200
 
@@ -164,6 +166,13 @@ def usuario_email(email):
     for row in result:
         dicc = {}
         dicc['id'] = row.id
+        dicc['nombre'] = row.nombre
+        dicc['apellido'] = row.apellido
+        dicc['email'] = row.email
+        dicc['contraseña'] = row.contraseña
+        dicc['rol'] = row.rol
+        if row.empresa:
+            dicc['empresa'] = row.empresa
         data.append(dicc)
     return jsonify(data), 200
 
@@ -220,7 +229,7 @@ def hoteles():
         dicc['nombre'] = row.nombre
         dicc['provincia'] = row.provincia
         dicc['ciudad'] = row.ciudad
-        dicc['empresa'] = row.empresa
+        dicc['propietario_id'] = row.propietario_id
         data.append(dicc)
     return jsonify(data), 200
 
@@ -240,7 +249,9 @@ def hotel_detalle(hotel_id):
         dicc['nombre'] = row.nombre
         dicc['provincia'] = row.provincia
         dicc['ciudad'] = row.ciudad
-        dicc['empresa'] = row.empresa
+        dicc['latitud'] = row.latitud
+        dicc['longitud'] = row.longitud
+        dicc['propietario_id'] = row.propietario_id
         data.append(dicc)
     return jsonify(data), 200
 
@@ -279,36 +290,53 @@ def hospedajes():
         dicc['fecha'] = row.fecha
         dicc['habitacion'] = row.habitacion
         dicc['hotel'] = row.hotel
-        dicc['fecha_inicial'] = row.fecha_inicial
-        dicc['fecha_final'] = row.fecha_final
+        dicc['fecha_inicial'] = row.fecha_inicial.strftime('%Y-%m-%d')
+        dicc['fecha_final'] = row.fecha_final.strftime('%Y-%m-%d')
         dicc['usuario'] = row.usuario
         dicc['estado'] = row.estado
         data.append(dicc)
     return jsonify(data), 200
 
 #------------------------- consulta hospedajes por email------------------------------------
-@app.route('/reservas/<email>', methods=['GET'])
-def reservas(email):
+@app.route('/hospedaje/<email>', methods=['GET'])
+def hospedajes_email(email):
     email = email.strip()
     conn = set_connection()
     data = []
     try:
         result = conn.execute(text(query_select_reservas), {"email": email})
-        for row in result:
-            dicc = {
-                'id': row.id,
-                'fecha': row.fecha,
-                'habitacion': row.habitacion,
-                'hotel': row.hotel,
-                'fecha_inicial': row.fecha_inicial,
-                'fecha_final': row.fecha_final,
-                'usuario': row.usuario,
-                'estado': row.estado
-            }
-            data.append(dicc)
     except SQLAlchemyError as err:
         return jsonify({'mensaje:': "se ha producido un error al recibir los datos: " + str(err)}), 500
+    for row in result:
+        dicc = {}
+        dicc['id'] = row.id
+        dicc['fecha'] = row.fecha.strftime('%Y-%m-%d')
+        dicc['habitacion'] = row.habitacion_id
+        dicc['hotel'] = row.hotel_id
+        dicc['fecha_inicial'] = row.fecha_inicial.strftime('%Y-%m-%d')
+        dicc['fecha_final'] = row.fecha_final.strftime('%Y-%m-%d')
+        dicc['usuario'] = row.usuario_id
+        dicc['estado'] = row.estado
+        data.append(dicc)
     return jsonify(data), 200
+
+#------------------------- consulta hospedajes por hotel y habitacion------------------------------------
+@app.route('/hospedaje/<int:hotel_id>/<int:room_id>', methods=['GET'])
+def hospedajes_hotel_habitacion(hotel_id, room_id):
+    conn = set_connection()
+    data = []
+    try:
+        result = conn.execute(text(query_select_hospedajes_hotel_habitacion), {"hotel_id":hotel_id, "room_id":room_id})
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:': "se ha producido un error al recibir los datos: " + str(err)}), 500
+    for row in result:
+        dicc = {}
+        dicc['fecha_inicial'] = row.fecha_inicial.strftime('%Y-%m-%d')
+        dicc['fecha_final'] = row.fecha_final.strftime('%Y-%m-%d')
+        data.append(dicc)
+    print(data, "Data")
+    return jsonify(data), 200
+
 #----------------------------SECTOR DE MODIFICACION-------------------------
 
 #---------------------modificaciones propietario--------------------------
@@ -330,7 +358,7 @@ def modificar_propietario(id):
 def modificar_usuario(id):
     conn = set_connection()
     datos = request.get_json()
-    query = f"""UPDATE USUARIOS SET nombre='{datos['nombre']}', apellido='{datos['apellido']}', email='{datos['email']}', contraseña='{datos['contraseña']}', dni='{datos['dni']}' WHERE id={id};"""
+    query = f"""UPDATE USUARIOS SET nombre='{datos['nombre']}', apellido='{datos['apellido']}', email='{datos['email']}', contraseña='{datos['contraseña']}' WHERE id={id};"""
     try:
         conn.execute(text(query))
         conn.commit()
@@ -440,8 +468,9 @@ def eliminar_hospedaje(id):
 #--------------------eliminar habitacion----------------------
 @app.route('/habitacion/<id>', methods=['DELETE'])
 def eliminar_habitacion(id):
+    print(id,"Entro")
     conn = set_connection()
-    query_delete_disponibilidad = f"DELETE FROM DISPONIBILIDAD WHERE habitacion={id};"
+    query_delete_disponibilidad = f"DELETE FROM DISPONIBILIDAD WHERE habitacion_id={id};"
     conn.execute(text(query_delete_disponibilidad))
     query = f"DELETE FROM HABITACIONES WHERE id={id};"
     try:

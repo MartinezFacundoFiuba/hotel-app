@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{%block content%}
+    <body class="cuerpo-de-inicio-sesión">
+        <div id="formulario-propietario">
+            <form id="login" action="/" method="post">
+                <h2 class="inicia-sesión">Inicia Sesión </h2>
+                <div class="form_input">
+                    <label for="email">Email</label>
+                    <input type="text" placeholder="ejemplo@gmail.com" id="email" name="email" required>
+                </div>
+                <div class="form_input">
+                    <label for="contraseña">Contraseña:</label>
+                    <input type="password" id="contraseña" placeholder="Contraseña" name="contraseña" required>
+                </div>
+                <div class="form_input" style="display: flex; justify-content: center;">
+                    <button type="submit" id="sesión">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </body>
+{% endblock %}

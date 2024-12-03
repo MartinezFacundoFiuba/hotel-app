@@ -69,6 +69,13 @@
 
 <ReservationsScreen@Screen>:
     FloatLayout:
+        canvas.before:
+            Color:  
+                rgba: (0.8, 0.52, 0.25, 1) 
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'assets/images/banner.jpg' 
         Label:
             text: "Ingresa tu correo electrónico para ver tus reservas"
             font_size: 20

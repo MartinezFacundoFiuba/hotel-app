@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Bienvenido {{ user[0]['nombre'] }}</h2>
+        <form action="{{ url_for('hotelenviado') }}" method="POST" style="display: flex; flex-direction: column; gap: 10px; padding: 20px;">
+            <label for="nombre">Nombre del Hotel:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="provincia">Provincia:</label>
+            <input type="text" id="provincia" name="provincia" required>
+
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required>
+
+            <label for="latitud">Latitud:</label>
+            <input type="text" id="latitud" name="latitud" required>
+
+            <label for="longitud">Longitud:</label>
+            <input type="text" id="longitud" name="longitud" required>
+
+            <input type="hidden" name="propietario_id" value="{{ user['id'] }}">
+
+            <button type="submit" style="margin-top: 10px; ">Crear Hotel</button>
+        </form>
+</div>
+{% endblock %}

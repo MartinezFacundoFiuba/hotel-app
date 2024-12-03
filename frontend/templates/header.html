@@ -13,9 +13,21 @@
         <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">        
                 <li><a href="{{ url_for('home')}}">inicio</a></li>
-                <li><a href="{{ url_for('hoteles')}}">Hoteles</a></li>
-                <li><a href="{{ url_for('registro')}}">Registrarse</a></li> 
-                <li><a href="{{url_for('inicio_sesión')}}">Iniciar sesion </a></li>  
+                {% if user and user[0].rol == 'usuario' %}
+                    <li><a href="{{ url_for('hoteles')}}">Hoteles</a></li>
+                    <li><a href="#">{{ user[0].nombre }} {{ user[0].apellido }}</a></li>
+                    <li><a href="{{ url_for('reservas')}}">Mis reservas</a></li>
+                    <li><a href="{{ url_for('logout')}}">Cerrar sesión</a></li>
+                {% elif user and user[0].rol == 'propietario' %}
+                    <li><a href="#">{{ user[0].nombre }} {{ user[0].apellido }}</a></li>
+                    <li><a href="{{ url_for('hoteles')}}">Mis hoteles</a></li>
+                    <li><a href="{{ url_for('crear_hotel')}}">Crear hotel</a></li>
+                    <li><a href="{{ url_for('logout')}}">Cerrar sesión</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('hoteles')}}">Hoteles</a></li>
+                    <li><a href="{{ url_for('registro')}}">Registrarse</a></li> 
+                    <li><a href="{{url_for('inicio_sesion')}}">Iniciar sesión</a></li>  
+                {% endif %}
             </ul>
         </div>
     </div>
