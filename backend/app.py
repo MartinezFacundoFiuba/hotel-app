@@ -75,8 +75,13 @@ def agregar_hospedaje():
     result = conn
     datos = request.get_json()
     print(datos)
-    query=f"""INSERT INTO DISPONIBILIDAD (habitacion,hotel,fecha_inicial,fecha_final,usuario) 
-    VALUES ('{datos["habitacion"]}','{datos["hotel"]}','{datos["fecha_inicial"]}','{datos["fecha_final"]}','{datos["usuario"]}');"""
+    habitacion = int(datos['habitacion'])  # Verifica que sea convertible a entero
+    hotel = datos['hotel']
+    fecha_inicial = datos['fecha_inicial']
+    fecha_final = datos['fecha_final']
+    usuario = int(datos['usuario'])
+    query=f"""INSERT INTO DISPONIBILIDAD (habitacion,hotel,fecha_inicial,fecha_final,usuario)VALUES ('{habitacion}','{hotel}','{fecha_inicial}','{fecha_final}','{usuario}');"""
+    print(query)
     try:
         result.execute(text(query))
         conn.commit()
@@ -102,6 +107,25 @@ def agregar_usuario():
     except SQLAlchemyError as err:
         return jsonify({'mensaje:': 'se a producido un error al enviar los datos' +str(err)}),500
 #-------------------------SECTOR DE CONSULTA DE DATOS-------------------------
+#------------------------- consulta ofertas------------------------------------
+@app.route('/ofertas',methods=["GET"])
+def ofertas():
+    conn=set_connection()
+    data=[]
+    query="SELECT * FROM ofertas;"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    for row in result:
+        dicc = {}
+        dicc['precio_oferta'] = row.precio_oferta
+        dicc['precio_real'] = row.precio_real
+        dicc['hotel'] = row.hotel
+        dicc['habitacion'] = row.habitacion
+  
+        data.append(dicc)
+    return jsonify(data),200
 #------------------------- consulta usuarios------------------------------------
 @app.route('/usuarios',methods=["GET"])
 def usuarios():
@@ -228,6 +252,33 @@ def hotel(id):
             }
             data.append(diccionario)
     return jsonify(data), 200
+#------------------------- consulta hoteles por empresa------------------------------------
+@app.route('/hoteles/<nombre>/habitaciones',methods=["GET"])
+def hotel_dni(nombre):
+    conn=set_connection()
+    data=[]
+    print(nombre)
+    query = f"SELECT * FROM HABITACIONES WHERE hotel='{nombre}';"
+    try:
+        result= conn.execute(text(query))
+        print(query)
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    print(result)
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'id':row.id,
+            'piso':row.piso,
+            'habitacion':row.habitacion,
+            'precio':row[3],          
+            'empresa':row[4],
+
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
 #------------------------- consulta propietarios------------------------------------
 @app.route('/propietarios',methods=["GET"])
 def propietarios():
@@ -312,6 +363,27 @@ def hospedaje(id):
             'fecha_inicial':row[3],          
             'fecha_final':row[4],
             'usuario':row[5]
+            }
+            data.append(diccionario)
+    return jsonify(data), 200
+#------------------------- consulta hospedajes por hotel------------------------------------
+@app.route('/hospedaje/<empresa>/<habitacion>',methods=["GET"])
+def hospedaje_empresa(empresa,habitacion):
+    conn=set_connection()
+    data=[]
+    query=f"SELECT * FROM DISPONIBILIDAD WHERE hotel='{empresa}' AND habitacion ='{habitacion}';"
+    print(query)
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    resultado = result.fetchall()
+    if resultado != 0:
+        data = []
+        for row in resultado:
+            diccionario = {
+            'fecha_inicial':row[3],          
+            'fecha_final':row[4],
             }
             data.append(diccionario)
     return jsonify(data), 200
@@ -429,12 +501,13 @@ def eliminar_usuario(id):
     except SQLAlchemyError as err:
         return jsonify({'message':'Se ha producido un error ' + str(err.__cause__)})
     return jsonify({'message':'Se ha eliminado correctamente'}), 200
-#---------------------eliminar hospedaje-------------------------
-@app.route('/hospedajo/<id>', methods=['DELETE'])
-def eliminar_hospedaje(id):
+
+#---------------------eliminar hospedaje por dni-------------------------
+@app.route('/hospedaje/<dni>', methods=['DELETE'])
+def eliminar_hospedaje(dni):
     conn=set_connection()
     result = conn
-    query = f"DELETE FROM DISPONIBILIDAD WHERE id={id};"
+    query = f"DELETE FROM DISPONIBILIDAD WHERE usuario={dni};"
     try:
         result.execute(text(query))
         conn.commit()
@@ -471,14 +544,18 @@ def login():
         resultado = result.fetchall()
         print(resultado)
         usuario = resultado
-        if result is None:
-            return jsonify({"mensaje": 'Correo o contraseña incorrectos'},), 403
+        if not  resultado:
+            return jsonify({"mensaje": 'Correo o contraseña incorrectos'}), 201
         if result:
+            print(resultado)
             usuario_data = {
             "id": resultado[0][0],
-            "email": resultado[0][1],
-            "nombre": resultado[0][2],
-            "apellido": resultado[0][3],
+            "email": resultado[0][3],
+            "nombre": resultado[0][1],
+            "apellido": resultado[0][2] ,
+           "empresa": resultado[0][5],
+            "contraseña":resultado[0][4],
+            "dni": resultado[0][6]
         }
             return jsonify({'message':'Se ha agregado correctamente'},usuario_data),200
         else:
@@ -488,6 +565,22 @@ def login():
         return jsonify({'mensaje': 'Se ha producido un error al recibir los datos: ' + str(err)}), 500
     finally:
         conn.close()
+@app.route("/coordenadas")
+def coordenadas():
+    conn=set_connection()
+    data=[]
+    query="SELECT * FROM HOTELES;"
+    try:
+        result= conn.execute(text(query))
+    except SQLAlchemyError as err:
+        return jsonify({'mensaje:':"se a producido un error al recibir los datos" +str(err)}),500
+    for row in result:
+        dicc = {}
+        dicc['latitud'] = row.latitud
+        dicc['longitud'] = row.longitud
+        data.append(dicc)
+    print(data)
+    return jsonify(data),200
 if __name__ == '__main__':
    app.run("127.0.0.1",debug=True, port=5003
            )
