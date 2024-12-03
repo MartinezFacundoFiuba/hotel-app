@@ -5,24 +5,82 @@
     <h2>Reservar Habitación</h2>
     <form action="{{ url_for('formularioenviado') }}" method="post" style="padding: 20px;">
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required><br><br>
+        <input type="text" id="nombre" name="nombre" value="{{ user[0].nombre }}" required disabled><br><br>
 
         <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required><br><br>
+        <input type="text" id="apellido" name="apellido" value="{{ user[0].apellido }}" required disabled><br><br>
 
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" required><br><br>
+        <input type="text" id="email" name="email" value="{{ user[0].email }}" required disabled><br><br>
 
-        <label for="inicio">Fecha de Inicio:</label>
-        <input type="date" id="inicio" name="inicio" required><br><br>
+        <label for="inicio_reserva">Fecha de Inicio:</label>
+        <input type="date" id="inicio_reserva" name="inicio_reserva" required min="{{ today }}" oninput="setMinEndDate()"><br><br>
 
-        <label for="final">Fecha de Fin:</label>
-        <input type="date" id="final" name="final" required><br><br>
+        <label for="final_reserva">Fecha de Fin:</label>
+        <input type="date" id="final_reserva" name="final_reserva" required><br><br>
+        
 
-        <input type="hidden" id="id_habitacion" name="id_habitacion" value="{{ room_id }}">
-        <input type="hidden" id="id_hotel" name="id_hotel" value="{{ hotel_id }}">
+        <input type="hidden" id="habitacion_id" name="habitacion_id" value="{{ room_id }}">
+        <input type="hidden" id="hotel_id" name="hotel_id" value="{{ hotel_id }}">
 
         <input type="submit" value="Reservar">
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('inicio_reserva').setAttribute('min', today);
+
+    function setMinEndDate() {
+        const startDate = document.getElementById('inicio_reserva').value;
+        if (startDate) {
+            document.getElementById('final_reserva').setAttribute('min', startDate);
+        }
+    }
+
+    document.getElementById('inicio_reserva').addEventListener('change', function() {
+        setMinEndDate();
+        disableReservedDates();
+    });
+
+    function disableReservedDates() {
+        const reservas = JSON.parse('{{ fechas_reservadas | tojson | safe }}');
+        reservas.sort();
+        console.log(reservas, "Reservas")
+        if (reservas.length > 0) {
+        
+            const datePickerInicio = flatpickr("#inicio_reserva", {
+                disable: reservas 
+            });
+
+            const datePickerFin = flatpickr("#final_reserva", {
+                disable: reservas,
+                onReady: function(selectedDates, dateStr, instance) {
+                    const minDate = datePickerInicio.selectedDates[0];
+                    
+                    function findMaxDate(minDate, reservas) {
+                        let currentDate = new Date(minDate);
+                        while (!reservas.includes(currentDate.toISOString().split('T')[0]) && currentDate.toISOString().split('T')[0] < reservas[reservas.length - 1]) {
+                            currentDate.setDate(currentDate.getDate() + 1);
+                        }
+                        if (currentDate.toISOString().split('T')[0] >= reservas[reservas.length - 1]) {
+                            return null;
+                        }
+                        currentDate.setDate(currentDate.getDate() - 1);
+                        return currentDate.toISOString().split('T')[0];
+                    }
+
+                    const maxDate = findMaxDate(minDate, reservas);
+
+                    if (minDate) {
+                        instance.set('minDate', minDate);
+                        instance.set('maxDate', maxDate);
+                    }
+                }
+            });
+        }
+    }
+
+    window.onload = disableReservedDates;
+</script>
 {% endblock %}

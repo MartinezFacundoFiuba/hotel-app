@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container" style="display: flex; flex-direction: column; gap: 20px; padding: 20px; justify-content: center; align-items: center;">
+        <div>
+        <h2>Editar Hotel</h2>
+        
+        <form method="POST" action="{{ url_for('agregar_habitacion') }}" style="display: flex; flex-direction: column; gap: 10px; padding: 20px;">
+            <input type="hidden" name="hotel_id" value="{{ hotel_id }}">
+            
+            <div class="form-group">
+                <label for="numero_habitacion">Número de la Habitación:</label>
+                <input type="text" id="numero_habitacion" name="numero_habitacion" required>
+            </div>
+
+            <div class="form-group">
+                <label for="piso">Piso de la Habitación:</label>
+                <input type="text" id="piso" name="piso" required>
+            </div>
+
+            <div class="form-group">
+                <label for="precio">Precio de la Habitación:</label>
+                <input type="text" id="precio" name="precio" required>
+            </div>
+            
+            <button type="submit">Agregar Habitación</button>
+            </form>
+        </div>
+        
+        <div>
+            <h3>Habitaciones Existentes</h3>
+            <ul>
+            {% for habitacion in habitaciones %}
+                <li>
+                    {{ habitacion.habitacion }} - Piso: {{ habitacion.piso }} - Precio: ${{ habitacion.precio }} 
+                    <form method="POST" action="{{ url_for('eliminar_habitacion', habitacion_id=habitacion.id, hotel_id=hotel_id) }}" style="display:inline;">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

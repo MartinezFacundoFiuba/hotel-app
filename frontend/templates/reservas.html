@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Mis Reservas</h1>
-
-    <ul>
+    <div class="container">
+        <h1>Mis Reservas</h1>
+        <ul>
         {% for reserva in reservas %}
-
-            <li>
-
-                {{ reserva.detalle }} - Estado: {{ reserva.estado }}
-
-                <form action="{{ url_for('cancelar_reserva', reserva_id=reserva.id) }}" method="post"> 
-
-                    <button type="submit">Cancelar Reserva</button>
-
+            <li class="list-group-item" style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <p>Reserva hecha: {{ reserva.fecha }}</p>
+                    <p>Hotel: {{ reserva.hotel }} - Habitación: {{ reserva.habitacion }}</p>
+                    <p>Fecha de Inicio: {{ reserva.fecha_inicial }} - Fecha de Finalización: {{ reserva.fecha_final }}</p>
+                    <p>Estado: {{ reserva.estado }}</p>
+                </div>
+                <form action="{{ url_for('reservas') }}" method="post" style="width: 200px; margin-left: 400px;"> 
+                    <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
+                    <button type="submit" class="btn btn-danger" style="width: 100%;">Cancelar Reserva</button>
                 </form>
-
             </li>
         {% endfor %}
-    </ul>
+        </ul>
+    </div>
 {% endblock %}
