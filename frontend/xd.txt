@@ -212,3 +212,21 @@ function enviarResultado(resultado) {
       console.error('Error al enviar el resultado:', error);
     });
   }
+      # Obtener el mes y año actuales
+    hoy = datetime.today()
+    mes = hoy.month
+    año = hoy.year
+
+    # Obtener el primer día del mes y el número de días en el mes
+    primer_dia = datetime(año, mes, 1)
+    ultimo_dia = datetime(año, mes + 1, 1) - timedelta(days=1)
+    dias_en_mes = (ultimo_dia - primer_dia).days + 1
+
+    # Crear una lista de días del mes para renderizar en el calendario
+    calendario = []
+    for dia in range(1, dias_en_mes + 1):
+        fecha = datetime(año, mes, dia).date()  # Fecha del día actual
+        calendario.append({
+            'fecha': fecha,
+            'disponible': fecha in rooms  # Verificar si la fecha está en el set de fechas disponibles
+        })

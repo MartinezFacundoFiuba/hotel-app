@@ -15,6 +15,7 @@
     <button type="submit" id="reserveButton">Reservar</button>
     <script>
         const unavailableDays = {{ unavailable_days | tojson }};
+        var dni = {{ session['dni'] | tojson }};
     </script>
     <script src="/static/js/s.js"></script>
 </body>

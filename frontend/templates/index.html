@@ -78,15 +78,56 @@
     <h2>habitaciones-Principales</h2>
     <button>Ver mas</button>
 </div>
-<div id="Habitaciones-en-descuento"></div>
-    <h2>Ofertas</h2>
+    <h1>Ofertas</h1>
+    <h1>Ofertas Disponibles</h1>
+    <div class="Habitaciones-en-descuento">
+    {% for oferta in ofertas %}
+    <a href="{{ oferta.url }}" class="oferta-card">
+        <div class="oferta-content">
+            <h3>{{ oferta.hotel }}</h3>
+            <p><strong>Habitación:</strong> {{ oferta.habitacion }}</p>
+            <p><strong>Precio Oferta:</strong> ${{ oferta.precio_oferta }}</p>
+            <p><strong>Precio Real:</strong> ${{ oferta.precio_real }}</p>
+        </div>
+        <img src="{{ oferta.imagen }}" alt="Imagen de la oferta" class="oferta-img">
+    </a>
+    {% endfor %}
     <button>Ver mas</button>
 </div>
 <div id="reseñas">
     <h2>Reseñas</h2>
     <button>Ver mas</button>
 </div>
-<div id="preguntas-frecuentes"></div>
+<div id="Preguntas_Frecuentes">
     <h2>Preguntas Frecuentes</h2>
+    <div id="Contenedor_Preguntas">
+        <ul class="Lista">
+            <li>
+                <h3 class="Pregunta">¿Quenes somos?
+                    <div class="Signo Mas"></div>
+                </h3>
+                <div class="Respuesta">ETC ETC ETC ETC</div>
+            </li>
+            <li>
+                <h3 class="Pregunta">¿Como funciona Integrando hoteles?
+                    <div class="Signo Mas"></div>
+                </h3>
+                <div class="Respuesta">ETC ETC ETC ETC ETC</div>
+            </li>
+            <li>
+                <h3 class="Pregunta">¿Es seguro alquilar por este medio?
+                    <div class="Signo Mas"></div>
+                </h3>
+                <div class="Respuesta">etc etc etc</div>
+            </li>
+            <li>
+                <h3 class="Pregunta">¿Donde abono el alquiler?
+                    <div class="Signo Mas"></div>
+                </h3>
+                <div class="Respuesta">ETC ETC ETC.</div>
+            </li>
+        </ul>
+    </div>
+</div>
 </div>
 {% endblock %}

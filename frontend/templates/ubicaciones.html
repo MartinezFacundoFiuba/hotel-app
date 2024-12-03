@@ -1,0 +1,7 @@
+{%extends 'base.html' %}
+{%block main %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+<div id="Mapa"></div>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&callback=iniciarMap"></script>
+{%endblock %}

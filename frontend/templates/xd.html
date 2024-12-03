@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendarios con Días No Disponibles</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+  <h3>Selecciona un rango de fechas</h3>
+  {{disponibilidad}}
+  <form action="{{ url_for('correcto', habitacion=datos[0], hotel=datos[1]) }}" method="post">
+
+  <label for="start-date">Primer día:</label>
+  <input id="start-date" type="text" placeholder="Selecciona el primer día" name="inicio">
+  <br><br>
+  <label for="end-date">Último día:</label>
+  <input id="end-date" type="text" placeholder="Selecciona el último día" name="final">
+  <br><br>
+  <label for="text">Ingrese su numero de dni</label>
+  <input type="number" name="dni" id="dni">
+  <button type="submit">enviar</button>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Días no disponibles pasados desde el servidor
+      const diasNoDisponibles = {{ dispibinilidad|tojson }};
+  
+      // Inicializar el primer calendario
+      const startPicker = flatpickr("#start-date", {
+        dateFormat: "Y-m-d",
+        disable: diasNoDisponibles, // Deshabilitar días específicos
+        onChange: function (selectedDates) {
+          // Limitar fechas en el segundo calendario
+          const startDate = selectedDates[0];
+          if (startDate) {
+            endPicker.set("minDate", startDate);
+          }
+        }
+      });
+  
+      // Inicializar el segundo calendario
+      const endPicker = flatpickr("#end-date", {
+        dateFormat: "Y-m-d",
+        disable: diasNoDisponibles, // Deshabilitar días específicos
+        onOpen: function () {
+          // Actualizar fecha mínima basada en el primer calendario
+          const startDate = startPicker.selectedDates[0];
+          if (startDate) {
+            endPicker.set("minDate", startDate);
+          }
+        }
+      });
+    });
+  </script>
+  
+</body>
+</html>

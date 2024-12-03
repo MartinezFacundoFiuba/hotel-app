@@ -3,24 +3,26 @@ from flask_login import LoginManager
 import requests
 from datetime import datetime, timedelta
 app = Flask(__name__)
-app.secret_key = "46934825"
+app.secret_key = "1"
 @app.route('/')
 def home():
-    return render_template('index.html')
+    response = requests.get('http://127.0.0.1:5003/ofertas')
+    ofertas = response.json()
+
+    return render_template('index.html',ofertas=ofertas)
 @app.route('/hoteles')
 def hoteles():
     response = requests.get('http://127.0.0.1:5003/hoteles')
     hotels = response.json()
-    print(hotels)
     return render_template('hoteles.html', hotels=hotels)
 @app.route('/habitaciones')
 def habitaciones():
+    
     return render_template('habitaciones.html')
 @app.route('/habitaciones/<id>')
 def habitacion(id):
     response = requests.get(f'http://127.0.0.1:5003/habitaciones/{id}')
     rooms = response.json()
-    print(rooms)
     return render_template('rooms-tariff.html', rooms=rooms)
 @app.route('/ubicaciones')
 def ubicaciones():
@@ -37,54 +39,104 @@ def registro_propietario():
 @app.route('/registro')
 def registro():
     return render_template('registro.html')
-@app.route('/reservar/')
-def reservar():
-    response = requests.get(f'http://127.0.0.1:5003/hospedaje')
-    rooms = response.json()
-   
-    # Obtener el mes y año actuales
-    hoy = datetime.today()
-    mes = hoy.month
-    año = hoy.year
-
-    # Obtener el primer día del mes y el número de días en el mes
-    primer_dia = datetime(año, mes, 1)
-    ultimo_dia = datetime(año, mes + 1, 1) - timedelta(days=1)
-    dias_en_mes = (ultimo_dia - primer_dia).days + 1
-
-    # Crear una lista de días del mes para renderizar en el calendario
-    calendario = []
-    for dia in range(1, dias_en_mes + 1):
-        fecha = datetime(año, mes, dia).date()  # Fecha del día actual
-        calendario.append({
-            'fecha': fecha,
-            'disponible': fecha in rooms  # Verificar si la fecha está en el set de fechas disponibles
-        })
-    print(calendario)
-    unavailable_days = [ {'date': '2024-11-25'}, {'date': '2024-11-14'}, {'date': '2025-01-01'} ]
-    return render_template('room-details.html', unavailable_days=unavailable_days)
-
+@app.route('/hoteles/<hotel>/<habitacion>/reserva',methods = ["POST","GET"])
+def reserva(hotel,habitacion):
+    if request.method == 'POST':
+        nhj=1
+    else:
+        response = requests.get(f'http://127.0.0.1:5003/hospedaje/{hotel}/{habitacion}')
+        dispibinilidad = response.json()
+        fechas_no_disponibles = []
+        for periodo in dispibinilidad:
+            inicio = datetime.strptime(periodo["fecha_inicial"], "%a, %d %b %Y %H:%M:%S %Z")
+            fin = datetime.strptime(periodo["fecha_final"], "%a, %d %b %Y %H:%M:%S %Z")
+            delta = timedelta(days=1) 
+        # Generar rango de fechas
+            while inicio <= fin:
+                fechas_no_disponibles.append(inicio.strftime("%Y-%m-%d"))
+                inicio += delta
+        print(fechas_no_disponibles)
+        datos=[habitacion,hotel]
+        return render_template('xd.html', dispibinilidad=fechas_no_disponibles,datos=datos)
 @app.route('/formulario_enviado')
 def formulario_enviado():
     print(session)
     return render_template('formulario_enviado.html')
+@app.route('/perfil')
+def perfil():
+    print(session)
+    return render_template('perfil.html')
+@app.route('/perfil/<dni>/hoteles')
+def hoteles_dni(dni):
+    print(session)
+    url = f"http://127.0.0.1:5003/hoteles/1/{dni}"
+    datos={}
+    print(url)
+    response = requests.get(url)
+    datos = response.json()
+    print(datos)
+    return render_template ('mis_hoteles.html',datos=datos)
 @app.route("/iniciar_sesion",methods = ["POST","GET"])
 def iniciar_sesion():
+    session.permanent = False 
     if request.method == 'POST':
         email = request.form.get("email")
+        print("email",email)
         contraseña = request.form.get("contraseña")
         url = "http://127.0.0.1:5003/iniciar_sesion"
         datos={"email":email,"contraseña":contraseña
         }
         response = requests.post(url, json=datos)
-        print(response)
+        print("mensaje ",response.json)
         if response.status_code == 200:
+            print("hola")
             datos = response.json()
             print(datos[1]['email'])
-            session['email'] = datos[1]['email'] 
-        return redirect(url_for('formulario_enviado'))
+            session['usuario'] = datos[1]
+            print("sesion",session['usuario'])
+            return redirect(url_for('formulario_enviado'))
+        else:
+            return render_template('inicio.html')
     else:
+            return render_template('inicio.html')
+@app.route("/cerrar_sesion")
+def cerrar_sesion():
+    print(session)
+    if 'usuario' in session:
+        print("cerrar")
+        session.pop('usuario', None)
+        return redirect(url_for('home'))
+    return redirect(url_for('home'))
+@app.route('/hoteles/<nombre>/habitaciones')
+def habitacion_de_hotel(nombre):
+    response = requests.get(f'http://127.0.0.1:5003/hoteles/{nombre}/habitaciones')
+    habitaciones = response.json()
+    return render_template('rooms-tariff.html', habitaciones=habitaciones)
+@app.route('/correct/<habitacion>/<hotel>',methods=["POST"])
+def correcto(habitacion,hotel):
+    inicio = request.form.get("inicio")
+    final = request.form.get("final")
+    dni = request.form.get("dni")
+    url = "http://127.0.0.1:5003/hospedaje"
+    datos={"habitacion":habitacion,"hotel":hotel,"fecha_inicial":inicio,"fecha_final":final,"usuario":dni
+    }
+    print(datos)
+    response = requests.post(url, json=datos)
+    if response.status_code == 200:
+        return "Ok"
+    else:
+        return "f"
+@app.route('/eliminar_reserva',methods=["GET","POST"])
+def eliminar_reserva():
+   if request.method == 'POST':
+       dni=request.form.get("dni")
+       datos={"dni":dni}
+       url = f"http://127.0.0.1:5003/hospedaje/{dni}"
+       requests.delete(url)
+       
+       return "ok"
+   else:
+       return render_template("eliminar.html")
 
-        return render_template('inicio.html')
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5002)

@@ -1,6 +1,11 @@
-{% extends 'base.html'}
+{% extends 'base.html' %}
 {% block main %}
-<h1>nombre</h1>
-<h2>apellido</h2>
-<h2>correo</h2>
+<h1>Bienvenido {{session['usuario']['dni']}}!</h1>
+<a href="{{ url_for('hoteles_dni', dni=session['usuario']['dni']) }}">
+    <h2>Mis hoteles</h2>
+</a>
+
+<h2>configuraciones</h2>
+<h2>ayuda y asistencia</h2>
+<h2>Notificaciones</h2>
 {% endblock %}

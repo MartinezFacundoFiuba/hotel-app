@@ -6,17 +6,18 @@
 
     <!-- form -->
     <div class="row">
-        {% for room in rooms %}
+        {% for habitacion in habitaciones %}
         <div class="col-sm-6 wowload fadeInUp">
             <div class="rooms">
-                <img src="{{ url_for('static', filename='images/photos/' ~ room.image) }}" class="img-responsive" alt="{{ room.title }}">
                 <div class="info">
-                    <h3>Número de habitación: {{ room['piso'] }}</h3>
-                    <p>Precio: {{ room['precio'] }}</p>
-                    <p>Piso: {{room['habitacion']}}</p>
+                    <h3>Número de habitación: {{ habitacion['piso'] }}</h3>
+                    <p>Precio: {{ habitacion['precio'] }}</p>
+                    <p>Piso: {{habitacion['habitacion']}}</p>
                 </div>
             </div>
+           <a href="{{url_for('reserva',hotel=habitacion['empresa'],habitacion=habitacion['habitacion'])}}"><button >reservar</button></a> 
         </div>
+
         {% endfor %}
     </div>
     
